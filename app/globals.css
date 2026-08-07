@@ -1,0 +1,141 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading), 'Playfair Display', serif;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 cursor-pointer border-none;
+  }
+
+  .btn-primary {
+    @apply bg-accent text-white;
+  }
+
+  .btn-primary:hover {
+    @apply bg-accent-hover -translate-y-0.5 shadow-lg;
+    box-shadow: 0 8px 20px rgba(230, 57, 70, 0.3);
+  }
+
+  .btn-gold {
+    @apply bg-gold text-primary;
+  }
+
+  .btn-gold:hover {
+    @apply -translate-y-0.5;
+    background: #b8941f;
+  }
+
+  .btn-outline {
+    @apply border-2 border-white/30 text-white bg-transparent;
+  }
+
+  .btn-outline:hover {
+    @apply border-gold text-gold;
+  }
+
+  .section-title {
+    @apply text-3xl text-primary relative pl-5;
+  }
+
+  .section-title::before {
+    content: '';
+    @apply absolute left-0 top-2 bottom-2 w-1 bg-accent rounded;
+  }
+
+  .form-group {
+    @apply mb-5;
+  }
+
+  .form-group label {
+    @apply block font-semibold text-sm mb-2 text-primary;
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    @apply w-full px-4 py-3 border-2 border-border-light rounded-lg text-sm font-body outline-none transition-all duration-300;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    @apply border-coast-blue;
+    box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+  }
+
+  .form-group textarea {
+    @apply resize-y min-h-[120px];
+  }
+}
+
+@layer utilities {
+  .ticker-animation {
+    animation: ticker 30s linear infinite;
+  }
+
+  .equalizer-bar {
+    animation: equalizer 1s ease-in-out infinite;
+  }
+
+  .fade-in-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease-out;
+  }
+
+  .fade-in-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .live-pulse {
+    animation: pulse 2s infinite;
+  }
+}
+
+@keyframes ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes equalizer {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(0.5); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.2); }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f8f9fa;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e3a5f;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #0a1628;
+}
