@@ -1,41 +1,36 @@
 import type { Metadata } from 'next';
-import { Playfair_Display, Inter } from 'next/font/google';
 import { ClerkProvider } from '@clerk/nextjs';
 import './globals.css';
-
-const playfair = Playfair_Display({
-  subsets: ['latin'],
-  variable: '--font-heading',
-  display: 'swap',
-});
-
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-body',
-  display: 'swap',
-});
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import PlayerBar from '@/components/PlayerBar';
+import BriefSlider from '@/components/BriefSlider';
 
 export const metadata: Metadata = {
-  title: 'The Coast Media Group | Kenya\'s Coastal Voice',
-  description: 'Kenya\'s leading coastal news, radio and TV platform. Breaking news from Mombasa, Kilifi, Nairobi and beyond. Listen to Radio Coast live.',
-  keywords: 'Kenya news, Mombasa news, coastal news, Radio Coast, Coast TV, Kenyan media',
-  openGraph: {
-    title: 'The Coast Media Group | Kenya\'s Coastal Voice',
-    description: 'Breaking news, live radio, and video from Kenya\'s coast.',
-    type: 'website',
-    url: 'https://thecoast.co.ke',
+  title: {
+    default: 'The Coast Media Group — News, Radio & TV',
+    template: '%s | The Coast Media Group',
   },
-  twitter: {
-    card: 'summary_large_image',
+  description:
+    "Kenya's leading coastal news, radio and TV platform. Breaking news, Radio Coast live, Coast TV, e-paper and advertising opportunities.",
+  openGraph: {
+    siteName: 'The Coast Media Group',
+    type: 'website',
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <ClerkProvider>
-      <html lang="en" className={`${playfair.variable} ${inter.variable}`}>
-        <body className="font-body text-text-main bg-white overflow-x-hidden antialiased">
-          {children}
+      <html lang="en">
+        <body className="antialiased min-h-screen flex flex-col">
+          <Header />
+          <BriefSlider />
+          <main className="flex-1 pb-16">{children}</main>
+          <Footer />
+          <PlayerBar />
         </body>
       </html>
     </ClerkProvider>

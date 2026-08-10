@@ -1,105 +1,110 @@
 'use client';
 
 import { useState } from 'react';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import BriefSlider from '@/components/BriefSlider';
-import { PaperPlane, CheckCircle, MapPin } from 'lucide-react';
+import { PenSquare, CheckCircle2, Loader2 } from 'lucide-react';
 
 export default function ReportPage() {
-  const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+  const [errorMsg, setErrorMsg] = useState('');
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setLoading(true);
+    setStatus('sending');
+    setErrorMsg('');
     const form = e.currentTarget;
-    const formData = new FormData(form);
-
+    const fd = new FormData(form);
+    const payload = {
+      name: fd.get('name'),
+      email: fd.get('email'),
+      phone: fd.get('phone'),
+      subject: fd.get('subject'),
+      location: fd.get('location'),
+      message: fd.get('message'),
+    };
     try {
-      await fetch('/api/reports', {
+      const res = await fetch('/api/reports', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: formData.get('name') || 'Anonymous',
-          email: formData.get('email') || '',
-          title: formData.get('title'),
-          message: formData.get('message'),
-          anonymous: formData.get('anonymous') === 'on',
-          location: formData.get('location'),
-        }),
+        body: JSON.stringify(payload),
       });
-      setSubmitted(true);
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || 'Submission failed');
+      }
+      setStatus('sent');
       form.reset();
     } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
+      setErrorMsg(err instanceof Error ? err.message : 'Submission failed');
+      setStatus('error');
     }
   }
 
   return (
-    <>
-      <Header />
-      <BriefSlider />
+    <div className="max-w-2xl mx-auto px-4 mt-10">
+      <div className="text-center mb-8">
+        <span className="inline-flex w-14 h-14 rounded-2xl bg-emerald-600 text-white items-center justify-center mb-4">
+          <PenSquare size={26} />
+        </span>
+        <h1 className="text-3xl font-extrabold text-coast-navy">Submit a Story</h1>
+        <p className="text-gray-500 mt-2">
+          Seen something newsworthy at the coast? Tip off our news desk — your identity stays confidential.
+        </p>
+      </div>
 
-      <section className="bg-gradient-to-br from-[#0a1628] to-[#1e3a5f] py-16 text-white">
-        <div className="max-w-[800px] mx-auto px-6 text-center">
-          <PaperPlane size={48} className="mx-auto mb-4 text-[#c9a227]" />
-          <h1 className="text-4xl font-bold mb-3 font-[var(--font-heading)]">Submit a Story</h1>
-          <p className="text-lg text-white/70">Have a news tip, photo, or video from your community? Our editorial team reviews every submission.</p>
+      {status === 'sent' ? (
+        <div className="bg-white rounded-2xl shadow-sm p-10 text-center">
+          <CheckCircle2 size={52} className="mx-auto text-emerald-500 mb-4" />
+          <h2 className="font-bold text-coast-navy text-xl mb-2">Story received!</h2>
+          <p className="text-gray-500">Thank you — our editors will review your submission shortly.</p>
+          <button
+            onClick={() => setStatus('idle')}
+            className="mt-6 text-coast-blue font-semibold text-sm"
+          >
+            Submit another story
+          </button>
         </div>
-      </section>
-
-      <section className="py-[60px]">
-        <div className="max-w-[600px] mx-auto px-6">
-          {submitted ? (
-            <div className="bg-white rounded-2xl p-10 shadow-lg text-center">
-              <CheckCircle size={64} className="mx-auto mb-4 text-[#10b981]" />
-              <h2 className="text-2xl font-bold text-[#0a1628] mb-2">Thank You!</h2>
-              <p className="text-[#718096] mb-6">Your story has been submitted to our news desk. Our editorial team will review it and get back to you within 24 hours.</p>
-              <button onClick={() => setSubmitted(false)} className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg font-semibold text-sm bg-[#0a1628] text-white hover:bg-[#1e3a5f] transition-all">
-                Submit Another Story
-              </button>
+      ) : (
+        <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm p-6 md:p-8 space-y-5">
+          <div className="grid sm:grid-cols-2 gap-5">
+            <div>
+              <label className="block text-sm font-semibold text-coast-navy mb-1.5">Full Name *</label>
+              <input name="name" required className="w-full border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-coast-blue" placeholder="Your name" />
             </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-8 shadow-lg">
-              <div className="form-group">
-                <label>Your Name (optional)</label>
-                <input type="text" name="name" placeholder="Enter your name" className="w-full px-4 py-3 border-2 border-[#e2e8f0] rounded-lg text-sm outline-none focus:border-[#0066cc]" />
-              </div>
-              <div className="form-group">
-                <label>Email (optional)</label>
-                <input type="email" name="email" placeholder="Enter your email" className="w-full px-4 py-3 border-2 border-[#e2e8f0] rounded-lg text-sm outline-none focus:border-[#0066cc]" />
-              </div>
-              <div className="form-group">
-                <label>Story Title *</label>
-                <input type="text" name="title" placeholder="What's your story about?" required className="w-full px-4 py-3 border-2 border-[#e2e8f0] rounded-lg text-sm outline-none focus:border-[#0066cc]" />
-              </div>
-              <div className="form-group">
-                <label>Location</label>
-                <div className="relative">
-                  <MapPin size={16} className="absolute left-3 top-3.5 text-[#718096]" />
-                  <input type="text" name="location" placeholder="e.g., Kisauni, Mombasa" className="w-full px-4 py-3 pl-10 border-2 border-[#e2e8f0] rounded-lg text-sm outline-none focus:border-[#0066cc]" />
-                </div>
-              </div>
-              <div className="form-group">
-                <label>Story Details *</label>
-                <textarea name="message" placeholder="Tell us what happened..." required rows={5} className="w-full px-4 py-3 border-2 border-[#e2e8f0] rounded-lg text-sm outline-none focus:border-[#0066cc] resize-y" />
-              </div>
-              <div className="flex items-center gap-2.5 mb-6">
-                <input type="checkbox" name="anonymous" id="anonymous" className="w-[18px] h-[18px] accent-[#e63946]" />
-                <label htmlFor="anonymous" className="text-sm text-[#718096]">Submit anonymously</label>
-              </div>
-              <button type="submit" disabled={loading} className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold text-sm bg-[#e63946] text-white hover:bg-[#c1121f] transition-all disabled:opacity-50">
-                {loading ? 'Sending...' : <><PaperPlane size={16} /> Send to News Desk</>}
-              </button>
-            </form>
+            <div>
+              <label className="block text-sm font-semibold text-coast-navy mb-1.5">Email *</label>
+              <input name="email" type="email" required className="w-full border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-coast-blue" placeholder="you@example.com" />
+            </div>
+          </div>
+          <div className="grid sm:grid-cols-2 gap-5">
+            <div>
+              <label className="block text-sm font-semibold text-coast-navy mb-1.5">Phone</label>
+              <input name="phone" className="w-full border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-coast-blue" placeholder="+254 7XX XXX XXX" />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-coast-navy mb-1.5">Location</label>
+              <input name="location" className="w-full border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-coast-blue" placeholder="e.g. Mombasa, Likoni" />
+            </div>
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-coast-navy mb-1.5">Story Subject *</label>
+            <input name="subject" required className="w-full border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-coast-blue" placeholder="Brief headline for your tip" />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-coast-navy mb-1.5">Story Details *</label>
+            <textarea name="message" required rows={6} className="w-full border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-coast-blue" placeholder="What happened? When? Who is involved? Any photos or videos available?" />
+          </div>
+          {status === 'error' && (
+            <p className="text-sm text-coast-red bg-red-50 rounded-lg px-4 py-2.5">{errorMsg}</p>
           )}
-        </div>
-      </section>
-
-      <Footer />
-    </>
+          <button
+            type="submit"
+            disabled={status === 'sending'}
+            className="w-full bg-coast-red text-white font-bold py-3.5 rounded-xl hover:brightness-110 transition flex items-center justify-center gap-2 disabled:opacity-60"
+          >
+            {status === 'sending' ? <><Loader2 size={18} className="animate-spin" /> Sending…</> : <><PenSquare size={18} /> Send to News Desk</>}
+          </button>
+        </form>
+      )}
+    </div>
   );
 }

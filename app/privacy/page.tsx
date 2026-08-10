@@ -1,29 +1,21 @@
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
+import LegalPage from '@/components/LegalPage';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = { title: 'Privacy Policy' };
 
 export default function PrivacyPage() {
   return (
-    <>
-      <Header />
-      <section className="py-[60px]">
-        <div className="max-w-[800px] mx-auto px-6">
-          <h1 className="text-4xl font-bold text-[#0a1628] mb-8 font-[var(--font-heading)]">Privacy Policy</h1>
-          <div className="prose prose-lg max-w-none text-[#2d3748] leading-relaxed">
-            <p className="mb-4">Last updated: August 2026</p>
-            <h2 className="text-xl font-bold text-[#0a1628] mt-8 mb-4">1. Introduction</h2>
-            <p className="mb-4">The Coast Media Group (&quot;we&quot;, &quot;our&quot;, or &quot;us&quot;) is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website.</p>
-            <h2 className="text-xl font-bold text-[#0a1628] mt-8 mb-4">2. Information We Collect</h2>
-            <p className="mb-4">We may collect personal information that you voluntarily provide to us when you register on our website, express interest in obtaining information about us or our products and services, or otherwise contact us.</p>
-            <h2 className="text-xl font-bold text-[#0a1628] mt-8 mb-4">3. How We Use Your Information</h2>
-            <p className="mb-4">We use personal information collected via our website for a variety of business purposes, including to provide and maintain our services, improve our website, and communicate with you.</p>
-            <h2 className="text-xl font-bold text-[#0a1628] mt-8 mb-4">4. Cookies</h2>
-            <p className="mb-4">We may use cookies and similar tracking technologies to access or store information. You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent.</p>
-            <h2 className="text-xl font-bold text-[#0a1628] mt-8 mb-4">5. Contact Us</h2>
-            <p className="mb-4">If you have questions or comments about this Privacy Policy, please contact us at: support@wedialai.com</p>
-          </div>
-        </div>
-      </section>
-      <Footer />
-    </>
+    <LegalPage
+      title="Privacy Policy"
+      updated="August 2026"
+      sections={[
+        { heading: '1. Information We Collect', body: 'We collect information you provide directly, such as your name, email address and phone number when you submit a story, send an advertising enquiry, or contact our news desk. We also collect standard technical data (browser type, device, pages visited) to improve our services.' },
+        { heading: '2. How We Use Your Information', body: 'Submissions are used by our editorial team to review and follow up on story tips. Contact details are never published without your consent. Advertising enquiries are shared only with our sales team. We do not sell your personal data to third parties.' },
+        { heading: '3. Story Source Protection', body: 'The Coast Media Group protects the identity of confidential news sources in line with Kenyan media law and our editorial code. Tell us if you wish to remain anonymous when submitting a story.' },
+        { heading: '4. Data Storage & Security', body: 'Your data is stored securely using industry-standard encryption via our database provider (Supabase) and authentication provider (Clerk). Access is restricted to authorised staff only.' },
+        { heading: '5. Your Rights', body: 'You may request access to, correction of, or deletion of your personal data at any time by emailing support@wedialai.com. We respond to all requests within 30 days.' },
+        { heading: '6. Contact', body: 'Questions about this policy? Contact The Coast Media Group, Mombasa, Kenya — phone +254 106 216 699 or email support@wedialai.com.' },
+      ]}
+    />
   );
 }

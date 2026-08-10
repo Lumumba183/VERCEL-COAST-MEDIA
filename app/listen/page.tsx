@@ -1,117 +1,92 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import BriefSlider from '@/components/BriefSlider';
-import { Play, Pause, Volume2, Radio, Headphones } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { Pause, Play, Radio, Volume2, AlertCircle } from 'lucide-react';
 
 export default function ListenPage() {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState(70);
+  const [streamUrl, setStreamUrl] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [playing, setPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    audioRef.current = new Audio('https://radio.thecoast.co.ke/stream');
-    audioRef.current.volume = volume / 100;
-    return () => { if (audioRef.current) { audioRef.current.pause(); audioRef.current.src = ''; } };
+    fetch('/api/settings')
+      .then((r) => (r.ok ? r.json() : {}))
+      .then((data: Record<string, string>) => setStreamUrl(data.stream_url || ''))
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
 
-  useEffect(() => {
-    if (audioRef.current) audioRef.current.volume = volume / 100;
-  }, [volume]);
-
-  const togglePlay = () => {
-    if (!audioRef.current) return;
-    if (isPlaying) {
+  const toggle = () => {
+    if (!streamUrl) return;
+    if (!audioRef.current) audioRef.current = new Audio(streamUrl);
+    if (playing) {
       audioRef.current.pause();
-      setIsPlaying(false);
+      setPlaying(false);
     } else {
-      audioRef.current.play().catch(() => {});
-      setIsPlaying(true);
+      audioRef.current.play().catch(() => setPlaying(false));
+      setPlaying(true);
     }
   };
 
-  const schedule = [
-    { time: '06:00 - 10:00', show: 'Morning Drive', host: 'DJ Kipawa', active: true },
-    { time: '10:00 - 13:00', show: 'Coast Talk', host: 'Amina Hassan', active: false },
-    { time: '13:00 - 16:00', show: 'The Vibe', host: 'Mike Juma', active: false },
-    { time: '16:00 - 19:00', show: 'Evening Reflections', host: 'Sarah Ochieng', active: false },
-    { time: '19:00 - 06:00', show: 'Night Coast', host: 'Auto DJ', active: false },
-  ];
-
   return (
-    <>
-      <Header />
-      <BriefSlider />
+    <div className="max-w-4xl mx-auto px-4 mt-10">
+      <div className="bg-gradient-to-br from-coast-navy to-coast-navy-light rounded-3xl p-8 md:p-14 text-center text-white shadow-xl">
+        <span className="inline-flex items-center gap-2 bg-coast-red/20 text-coast-red text-xs font-bold px-4 py-1.5 rounded-full mb-6">
+          <span className="w-2 h-2 rounded-full bg-coast-red animate-pulse" /> LIVE NOW
+        </span>
+        <h1 className="text-4xl md:text-5xl font-extrabold mb-2">Radio Coast</h1>
+        <p className="text-coast-gold font-semibold tracking-widest mb-8">98.7 FM — MOMBASA · KILIFI · MALINDI</p>
 
-      <section className="bg-gradient-to-br from-[#0a1628] to-[#1e3a5f] py-20 text-white text-center">
-        <div className="max-w-[800px] mx-auto px-6">
-          <Radio size={64} className="mx-auto mb-6 text-[#c9a227]" />
-          <h1 className="text-5xl font-bold mb-4 font-[var(--font-heading)]">Radio Coast Live</h1>
-          <p className="text-xl text-white/70 mb-10">Your coastal voice, 24/7. News, music, and community.</p>
-
-          <div className="bg-gradient-to-br from-[#1a1a2e] to-[#16213e] rounded-3xl p-10 border border-white/10 shadow-2xl max-w-[500px] mx-auto">
-            <div className="flex items-center justify-center gap-3 mb-6">
-              <div className="w-3 h-3 bg-[#ff4757] rounded-full live-pulse" />
-              <span className="text-[#c9a227] font-semibold text-sm uppercase tracking-wider">On Air Now</span>
-            </div>
-
-            <div className="flex items-end justify-center gap-1 h-16 mb-8">
-              {Array.from({ length: 12 }).map((_, i) => (
-                <div key={i} className="w-1.5 bg-gradient-to-t from-[#00a8a8] to-[#0066cc] rounded-sm equalizer-bar" style={{ height: `${[30,70,50,90,40,80,60,100,45,75,55,85][i]}%`, animationDelay: `${i * 0.08}s` }} />
-              ))}
-            </div>
-
-            <h2 className="text-2xl font-bold mb-2">Morning Drive with DJ Kipawa</h2>
-            <p className="text-white/60 mb-8">06:00 - 10:00 | Mon - Fri</p>
-
-            <button
-              onClick={togglePlay}
-              className="w-20 h-20 bg-gradient-to-br from-[#e63946] to-[#ff6b6b] rounded-full flex items-center justify-center text-white text-3xl shadow-lg hover:scale-110 transition-transform mx-auto mb-6"
-            >
-              {isPlaying ? <Pause size={32} fill="white" /> : <Play size={32} fill="white" className="ml-1" />}
-            </button>
-
-            <div className="flex items-center justify-center gap-3">
-              <Volume2 size={18} className="text-white/60" />
-              <input
-                type="range" min="0" max="100" value={volume}
-                onChange={(e) => setVolume(Number(e.target.value))}
-                className="w-40 accent-[#c9a227]"
-              />
-              <span className="text-white/60 text-sm w-8">{volume}%</span>
-            </div>
-          </div>
+        <div className="flex items-end justify-center gap-1 h-10 mb-8">
+          {playing ? (
+            <>
+              <span className="eq-bar" style={{ height: 22 }} /><span className="eq-bar" /><span className="eq-bar" />
+              <span className="eq-bar" /><span className="eq-bar" /><span className="eq-bar" /><span className="eq-bar" />
+            </>
+          ) : (
+            <Volume2 size={36} className="text-white/30" />
+          )}
         </div>
-      </section>
 
-      {/* Schedule */}
-      <section className="py-[60px] bg-[#f8f9fa]">
-        <div className="max-w-[800px] mx-auto px-6">
-          <h2 className="section-title mb-8 text-center justify-center">Today&apos;s Schedule</h2>
-          <div className="flex flex-col gap-3">
-            {schedule.map((slot, i) => (
-              <div key={i} className={`flex items-center gap-4 p-4 rounded-xl ${slot.active ? 'bg-[#0a1628] text-white' : 'bg-white text-[#2d3748] shadow-sm'}`}>
-                <div className="w-24 shrink-0">
-                  <span className={`text-sm font-semibold ${slot.active ? 'text-[#c9a227]' : 'text-[#718096]'}`}>{slot.time}</span>
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-bold text-base">{slot.show}</h3>
-                  <p className={`text-sm ${slot.active ? 'text-white/70' : 'text-[#718096]'}`}>with {slot.host}</p>
-                </div>
-                {slot.active && (
-                  <span className="bg-[#e63946] text-white text-[11px] font-bold uppercase px-3 py-1 rounded-full flex items-center gap-1">
-                    <Headphones size={12} /> Live
-                  </span>
-                )}
-              </div>
-            ))}
+        {loading ? (
+          <p className="text-white/60">Loading player…</p>
+        ) : streamUrl ? (
+          <button
+            onClick={toggle}
+            className="w-24 h-24 rounded-full bg-coast-red flex items-center justify-center mx-auto hover:scale-105 transition shadow-lg shadow-coast-red/40"
+            aria-label={playing ? 'Pause' : 'Play'}
+          >
+            {playing ? <Pause size={38} /> : <Play size={38} className="ml-1.5" />}
+          </button>
+        ) : (
+          <div className="max-w-md mx-auto bg-white/10 rounded-xl p-5 flex items-start gap-3 text-left">
+            <AlertCircle className="text-coast-gold shrink-0 mt-0.5" size={20} />
+            <p className="text-sm text-white/80">
+              The live stream isn&apos;t configured yet. Staff can set the stream URL in{' '}
+              <strong>Admin → Settings</strong>.
+            </p>
           </div>
-        </div>
-      </section>
+        )}
+      </div>
 
-      <Footer />
-    </>
+      <div className="grid md:grid-cols-3 gap-5 mt-10">
+        {[
+          { time: '05:00 – 09:00', show: 'Fichua Wazi', host: 'DJ Kipawa', desc: 'Morning drive with news, traffic and hits' },
+          { time: '09:00 – 13:00', show: 'Pwani Mid-Morning', host: 'Mama Bahari', desc: 'Talk, lifestyle and coastal culture' },
+          { time: '16:00 – 20:00', show: 'Mwangaza Drive', host: 'MC Rais', desc: 'Evening drive-time and sports updates' },
+        ].map((s) => (
+          <div key={s.show} className="bg-white rounded-2xl p-6 shadow-sm">
+            <p className="text-xs font-bold text-coast-red mb-1">{s.time}</p>
+            <h3 className="font-bold text-coast-navy text-lg flex items-center gap-2"><Radio size={17} /> {s.show}</h3>
+            <p className="text-sm text-coast-blue font-semibold mt-0.5">with {s.host}</p>
+            <p className="text-sm text-gray-500 mt-2">{s.desc}</p>
+          </div>
+        ))}
+      </div>
+      <p className="text-center text-sm text-gray-400 mt-6">
+        See the full programme line-up on the <a href="/schedule" className="text-coast-blue font-semibold">Schedule page</a>.
+      </p>
+    </div>
   );
 }

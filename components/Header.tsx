@@ -1,111 +1,159 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
-import { useUser, SignInButton, UserButton } from '@clerk/nextjs';
-import { Menu, X, Home, Newspaper, Briefcase, Dribbble, GraduationCap, Heart, HeartPulse, MessageSquare, Radio, Tv, BookOpen, Search, Info, Pen, Bullhorn } from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import {
+  Home, Newspaper, CalendarDays, Radio, Tv, Megaphone, Info, Menu, X,
+  PenSquare, PlayCircle, Search, MessageCircle,
+} from 'lucide-react';
+import { WHATSAPP_URL } from '@/lib/utils';
 
-const navLinks = [
+const NAV = [
   { href: '/', label: 'Home', icon: Home },
-  { href: '/news?cat=news', label: 'News', icon: Newspaper },
-  { href: '/news?cat=business', label: 'Business', icon: Briefcase },
-  { href: '/news?cat=sports', label: 'Sports', icon: Dribbble },
-  { href: '/news?cat=education', label: 'Education', icon: GraduationCap },
-  { href: '/news?cat=lifestyle', label: 'Lifestyle', icon: Heart },
-  { href: '/news?cat=health', label: 'Health', icon: HeartPulse },
-  { href: '/news?cat=opinion', label: 'Opinion', icon: MessageSquare },
+  { href: '/news', label: 'News', icon: Newspaper },
+  { href: '/schedule', label: 'Schedule', icon: CalendarDays },
   { href: '/listen', label: 'Radio', icon: Radio },
   { href: '/tv', label: 'Coast TV', icon: Tv },
-  { href: '/epaper', label: 'E-Paper', icon: BookOpen },
+  { href: '/advertise', label: 'Advertise', icon: Megaphone },
+  { href: '/about', label: 'About', icon: Info },
 ];
 
 export default function Header() {
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const { isSignedIn } = useUser();
+  const pathname = usePathname();
+  const [open, setOpen] = useState(false);
+  const [today, setToday] = useState('');
 
-  const today = new Date().toLocaleDateString('en-KE', {
-    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
-  });
+  useEffect(() => {
+    setToday(
+      new Date().toLocaleDateString('en-KE', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      })
+    );
+  }, []);
+
+  useEffect(() => setOpen(false), [pathname]);
 
   return (
-    <header className="bg-[#0a1628] sticky top-0 z-[1000] shadow-lg">
-      {/* Top bar */}
-      <div className="border-b border-white/10 py-2">
-        <div className="max-w-[1400px] mx-auto px-6 flex justify-between items-center">
-          <span className="text-white/70 text-[13px]">{today}</span>
-          <div className="flex gap-4">
-            <a href="https://x.com/CoastNewspaper" target="_blank" className="text-white/70 hover:text-[#c9a227] transition-colors text-sm"><i className="fab fa-x-twitter"></i></a>
-            <a href="#" className="text-white/70 hover:text-[#c9a227] transition-colors text-sm"><i className="fab fa-facebook-f"></i></a>
-            <a href="#" className="text-white/70 hover:text-[#c9a227] transition-colors text-sm"><i className="fab fa-instagram"></i></a>
-            <a href="#" className="text-white/70 hover:text-[#c9a227] transition-colors text-sm"><i className="fab fa-youtube"></i></a>
-            <a href="https://wa.me/254106216699" target="_blank" className="text-white/70 hover:text-[#c9a227] transition-colors text-sm"><i className="fab fa-whatsapp"></i></a>
+    <header className="sticky top-0 z-50 shadow-lg">
+      {/* Top utility bar */}
+      <div className="bg-coast-navy text-white/80 text-xs">
+        <div className="max-w-7xl mx-auto px-4 flex items-center justify-between h-8">
+          <span>{today}</span>
+          <div className="flex items-center gap-3">
+            <a href={WHATSAPP_URL} target="_blank" rel="noreferrer" className="hover:text-white flex items-center gap-1">
+              <MessageCircle size={12} /> WhatsApp
+            </a>
+            <Link href="/admin" className="hover:text-white">Staff Login</Link>
           </div>
         </div>
       </div>
 
-      {/* Main header */}
-      <div className="max-w-[1400px] mx-auto px-6 py-4 flex justify-between items-center">
-        <Link href="/" className="flex items-center gap-3 no-underline">
-          <div className="w-[50px] h-[50px] bg-gradient-to-br from-[#0066cc] to-[#00a8a8] rounded-xl flex items-center justify-center text-white font-black text-2xl font-[var(--font-heading)]">
-            C
-          </div>
-          <div>
-            <h1 className="text-white text-[28px] font-black leading-none tracking-tight">The Coast</h1>
-            <span className="text-[#c9a227] text-[11px] uppercase tracking-[3px] font-semibold">Media Group</span>
-          </div>
-        </Link>
-        <div className="flex items-center gap-5">
-          <Link href="/report" className="hidden sm:inline-flex items-center gap-2 px-6 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 border-2 border-white/30 text-white bg-transparent hover:border-[#c9a227] hover:text-[#c9a227]">
-            <Pen size={16} /> Submit Story
+      {/* Main bar */}
+      <div className="bg-coast-navy border-t border-white/10">
+        <div className="max-w-7xl mx-auto px-4 flex items-center justify-between h-16">
+          <Link href="/" className="flex items-center gap-3">
+            <span className="w-10 h-10 rounded-xl bg-gradient-to-br from-coast-blue to-sky-400 flex items-center justify-center text-white font-extrabold text-xl">
+              C
+            </span>
+            <span className="leading-tight">
+              <span className="block text-white font-extrabold text-xl tracking-tight">The Coast</span>
+              <span className="block text-coast-gold text-[10px] font-bold tracking-[0.3em]">MEDIA GROUP</span>
+            </span>
           </Link>
-          <Link href="/advertise" className="hidden sm:inline-flex items-center gap-2 px-6 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 bg-[#c9a227] text-[#0a1628] hover:-translate-y-0.5 hover:bg-[#b8941f]">
-            <Bullhorn size={16} /> Advertise
-          </Link>
-          <Link href="/listen" className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 bg-[#e63946] text-white hover:-translate-y-0.5 hover:bg-[#c1121f] hover:shadow-lg">
-            <Radio size={16} /> Listen Live
-          </Link>
-          {isSignedIn ? (
-            <UserButton afterSignOutUrl="/" />
-          ) : (
-            <SignInButton mode="modal">
-              <button className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-sm transition-all border border-white/30 text-white bg-transparent hover:border-[#c9a227] hover:text-[#c9a227]">
-                Sign In
-              </button>
-            </SignInButton>
-          )}
-        </div>
-      </div>
 
-      {/* Navigation */}
-      <nav className="bg-[#1e3a5f] border-t border-white/5">
-        <div className="max-w-[1400px] mx-auto px-4 flex justify-between items-center">
+          <div className="hidden md:flex items-center gap-3">
+            <Link
+              href="/report"
+              className="px-4 py-2 rounded-lg border border-white/30 text-white text-sm font-semibold hover:bg-white/10 transition flex items-center gap-2"
+            >
+              <PenSquare size={15} /> Submit Story
+            </Link>
+            <Link
+              href="/advertise"
+              className="px-4 py-2 rounded-lg bg-coast-gold text-coast-navy text-sm font-bold hover:brightness-110 transition flex items-center gap-2"
+            >
+              <Megaphone size={15} /> Advertise
+            </Link>
+            <Link
+              href="/listen"
+              className="px-4 py-2 rounded-lg bg-coast-red text-white text-sm font-bold hover:brightness-110 transition flex items-center gap-2"
+            >
+              <PlayCircle size={15} /> Listen Live
+            </Link>
+          </div>
+
           <button
-            className="lg:hidden bg-none border-none text-white text-2xl cursor-pointer py-3"
-            onClick={() => setMobileOpen(!mobileOpen)}
+            className="md:hidden text-white p-2"
+            onClick={() => setOpen(!open)}
+            aria-label="Toggle menu"
           >
-            {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+            {open ? <X size={24} /> : <Menu size={24} />}
           </button>
-          <ul className={`${mobileOpen ? 'flex' : 'hidden'} lg:flex list-none gap-0 flex-col lg:flex-row absolute lg:relative left-0 right-0 top-full lg:top-auto bg-[#1e3a5f] lg:bg-transparent p-4 lg:p-0`}>
-            {navLinks.map((link) => (
-              <li key={link.href}>
-                <Link
-                  href={link.href}
-                  className="flex items-center gap-[5px] text-white/85 no-underline py-3.5 px-3 text-xs font-semibold uppercase tracking-wide transition-all border-b-[3px] border-transparent hover:text-[#c9a227] hover:border-b-[#c9a227] hover:bg-white/5 whitespace-nowrap"
-                >
-                  <link.icon size={12} /> {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-          <div className="flex items-center gap-2 flex-shrink-0 ml-1.5 py-2">
-            <input
-              type="text"
-              placeholder="Search news..."
-              className="bg-white/10 border border-white/20 rounded-lg py-2 px-2.5 text-white text-xs w-[130px] outline-none focus:border-[#c9a227] focus:bg-white/15 transition-all"
-            />
-            <Link href="/about" className="text-white/70 hover:text-[#c9a227] transition-colors"><Info size={16} /></Link>
+        </div>
+      </div>
+
+      {/* Nav bar */}
+      <nav className="bg-coast-navy-light">
+        <div className="max-w-7xl mx-auto px-4 hidden md:flex items-center">
+          {NAV.map(({ href, label, icon: Icon }) => {
+            const active = href === '/' ? pathname === '/' : pathname.startsWith(href);
+            return (
+              <Link
+                key={href}
+                href={href}
+                className={`flex items-center gap-2 px-4 py-3 text-sm font-semibold transition border-b-2 ${
+                  active
+                    ? 'text-coast-gold border-coast-gold'
+                    : 'text-white/85 border-transparent hover:text-white'
+                }`}
+              >
+                <Icon size={15} /> {label}
+              </Link>
+            );
+          })}
+          <div className="ml-auto py-2">
+            <div className="flex items-center gap-2 bg-white/10 rounded-lg px-3 py-1.5 text-white/60 text-sm">
+              <Search size={14} />
+              <input
+                placeholder="Search news..."
+                className="bg-transparent outline-none placeholder-white/50 text-white w-36"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    const q = (e.target as HTMLInputElement).value.trim();
+                    if (q) window.location.href = `/news?q=${encodeURIComponent(q)}`;
+                  }
+                }}
+              />
+            </div>
           </div>
         </div>
+
+        {/* Mobile menu */}
+        {open && (
+          <div className="md:hidden px-4 pb-4 space-y-1">
+            {NAV.map(({ href, label, icon: Icon }) => (
+              <Link
+                key={href}
+                href={href}
+                className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/90 hover:bg-white/10 font-semibold"
+              >
+                <Icon size={16} /> {label}
+              </Link>
+            ))}
+            <div className="flex gap-2 pt-2">
+              <Link href="/report" className="flex-1 text-center px-3 py-2.5 rounded-lg border border-white/30 text-white text-sm font-semibold">
+                Submit Story
+              </Link>
+              <Link href="/listen" className="flex-1 text-center px-3 py-2.5 rounded-lg bg-coast-red text-white text-sm font-bold">
+                Listen Live
+              </Link>
+            </div>
+          </div>
+        )}
       </nav>
     </header>
   );

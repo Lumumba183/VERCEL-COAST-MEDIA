@@ -1,77 +1,86 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Play, Pause, SkipBack, SkipForward, Volume2, X } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { Pause, Play, Radio, X } from 'lucide-react';
+import { usePathname } from 'next/navigation';
 
-interface PlayerBarProps {
-  streamUrl?: string;
-}
-
-export default function PlayerBar({ streamUrl = 'https://radio.thecoast.co.ke/stream' }: PlayerBarProps) {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [visible, setVisible] = useState(false);
-  const [volume, setVolume] = useState(70);
-  const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
+/**
+ * Persistent bottom audio player.
+ * Reads the stream URL from site settings (set in Admin → Settings).
+ * Hidden on admin pages and when no stream URL is configured.
+ */
+export default function PlayerBar() {
+  const [streamUrl, setStreamUrl] = useState('');
+  const [playing, setPlaying] = useState(false);
+  const [visible, setVisible] = useState(true);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const pathname = usePathname();
 
   useEffect(() => {
-    const a = new Audio(streamUrl);
-    a.volume = volume / 100;
-    setAudio(a);
-    return () => { a.pause(); a.src = ''; };
+    fetch('/api/settings')
+      .then((r) => (r.ok ? r.json() : {}))
+      .then((data: Record<string, string>) => setStreamUrl(data.stream_url || ''))
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+      setPlaying(false);
+    }
   }, [streamUrl]);
 
-  useEffect(() => {
-    if (audio) audio.volume = volume / 100;
-  }, [volume, audio]);
+  if (!streamUrl || pathname.startsWith('/admin') || !visible) return null;
 
-  const togglePlay = () => {
-    if (!audio) return;
-    if (isPlaying) {
-      audio.pause();
-      setIsPlaying(false);
-      setVisible(false);
+  const toggle = () => {
+    if (!audioRef.current) {
+      audioRef.current = new Audio(streamUrl);
+    }
+    if (playing) {
+      audioRef.current.pause();
+      setPlaying(false);
     } else {
-      audio.play().catch(() => {});
-      setIsPlaying(true);
-      setVisible(true);
+      audioRef.current.play().catch(() => setPlaying(false));
+      setPlaying(true);
     }
   };
 
-  const closePlayer = () => {
-    if (audio) audio.pause();
-    setIsPlaying(false);
-    setVisible(false);
-  };
-
-  if (!visible) return null;
-
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-r from-[#0a1628] to-[#1e3a5f] border-t-2 border-[#c9a227] py-3 px-6 flex justify-between items-center z-[999] transition-transform duration-300">
-      <div className="flex items-center gap-4">
-        <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=100&h=100&fit=crop" alt="Radio Coast" className="w-12 h-12 rounded-lg object-cover" />
-        <div>
-          <h4 className="text-white text-sm font-semibold font-[var(--font-body)]">Radio Coast — Fichua Wazi</h4>
-          <span className="text-[#c9a227] text-xs">Morning Drive with DJ Kipawa</span>
+    <div className="fixed bottom-0 inset-x-0 z-40 bg-coast-navy text-white shadow-2xl border-t border-white/10">
+      <div className="max-w-7xl mx-auto px-4 h-14 flex items-center gap-4">
+        <span className="w-9 h-9 rounded-lg bg-coast-red flex items-center justify-center shrink-0">
+          <Radio size={18} />
+        </span>
+        <div className="min-w-0">
+          <p className="text-sm font-bold truncate">Radio Coast — Live</p>
+          <div className="flex items-end gap-[3px] h-4" aria-hidden>
+            {playing ? (
+              <>
+                <span className="eq-bar" /><span className="eq-bar" /><span className="eq-bar" />
+                <span className="eq-bar" /><span className="eq-bar" /><span className="eq-bar" />
+                <span className="eq-bar" />
+              </>
+            ) : (
+              <span className="text-xs text-white/50">Paused</span>
+            )}
+          </div>
         </div>
-      </div>
-      <div className="flex items-center gap-5">
-        <button className="bg-none border-none text-white text-lg hover:text-[#c9a227] transition-colors cursor-pointer"><SkipBack size={18} /></button>
-        <button onClick={togglePlay} className="w-11 h-11 bg-[#e63946] rounded-full flex items-center justify-center text-white cursor-pointer hover:scale-110 transition-transform">
-          {isPlaying ? <Pause size={18} /> : <Play size={18} />}
+        <button
+          onClick={toggle}
+          className="ml-auto w-10 h-10 rounded-full bg-coast-red flex items-center justify-center hover:brightness-110 transition shrink-0"
+          aria-label={playing ? 'Pause' : 'Play'}
+        >
+          {playing ? <Pause size={18} /> : <Play size={18} className="ml-0.5" />}
         </button>
-        <button className="bg-none border-none text-white text-lg hover:text-[#c9a227] transition-colors cursor-pointer"><SkipForward size={18} /></button>
+        <button
+          onClick={() => { audioRef.current?.pause(); setPlaying(false); setVisible(false); }}
+          className="text-white/50 hover:text-white shrink-0"
+          aria-label="Close player"
+        >
+          <X size={18} />
+        </button>
       </div>
-      <div className="flex items-center gap-2.5">
-        <Volume2 size={16} className="text-white" />
-        <input
-          type="range" min="0" max="100" value={volume}
-          onChange={(e) => setVolume(Number(e.target.value))}
-          className="w-[100px] accent-[#c9a227]"
-        />
-      </div>
-      <button onClick={closePlayer} className="bg-none border-none text-white/50 text-lg cursor-pointer hover:text-white transition-colors">
-        <X size={18} />
-      </button>
     </div>
   );
 }

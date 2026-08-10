@@ -1,18 +1,19 @@
 import { SignUp } from '@clerk/nextjs';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = { title: 'Staff Sign Up' };
 
 export default function SignUpPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0a1628] to-[#1e3a5f] flex items-center justify-center py-12 px-4">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-gradient-to-br from-[#0066cc] to-[#00a8a8] rounded-xl flex items-center justify-center text-white font-black text-3xl mx-auto mb-4">
-            C
-          </div>
-          <h1 className="text-2xl font-bold text-white font-[var(--font-heading)]">Create Account</h1>
-          <p className="text-white/60 mt-1">Join The Coast Media Group community</p>
-        </div>
-        <SignUp routing="hash" signInUrl="/sign-in" />
+    <div className="min-h-[70vh] flex flex-col items-center justify-center px-4 py-12 bg-gradient-to-br from-coast-navy to-coast-navy-light">
+      <div className="text-center mb-6">
+        <span className="inline-flex w-14 h-14 rounded-2xl bg-gradient-to-br from-coast-blue to-sky-400 text-white items-center justify-center font-extrabold text-2xl mb-3">
+          C
+        </span>
+        <h1 className="text-white font-extrabold text-2xl">Join the Staff Portal</h1>
+        <p className="text-white/60 text-sm">An administrator will assign your role after sign-up</p>
       </div>
+      <SignUp />
     </div>
   );
 }

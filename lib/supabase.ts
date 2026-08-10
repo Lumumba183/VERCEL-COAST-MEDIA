@@ -1,14 +1,22 @@
-import { createClient } from '@supabase/supabase-js';
-import type { Database } from './database';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 
-// Client-side supabase instance
-export const supabaseClient = createClient<Database>(supabaseUrl, supabaseAnonKey);
+/** Browser/anon client — safe for client components and public reads. */
+export function getAnonClient(): SupabaseClient {
+  return createClient(supabaseUrl, supabaseAnonKey);
+}
 
-// Server-side supabase instance (for API routes, server components)
-export const supabaseAdmin = createClient<Database>(supabaseUrl, supabaseServiceKey, {
-  auth: { autoRefreshToken: false, persistSession: false },
-});
+/**
+ * Server admin client — uses the service role key (bypasses RLS).
+ * Falls back to the anon key when the service key is not configured,
+ * in which case RLS policies govern access.
+ * NEVER import this in a client component.
+ */
+export function getServiceClient(): SupabaseClient {
+  return createClient(supabaseUrl, supabaseServiceKey || supabaseAnonKey, {
+    auth: { persistSession: false },
+  });
+}

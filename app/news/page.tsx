@@ -1,113 +1,85 @@
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import BriefSlider from '@/components/BriefSlider';
-import { supabaseClient } from '@/lib/supabase';
 import Link from 'next/link';
 import { Clock, Eye } from 'lucide-react';
+import { getArticles } from '@/lib/data';
+import { timeAgo, CATEGORY_COLORS } from '@/lib/utils';
+import { ARTICLE_CATEGORIES } from '@/types';
+import type { Metadata } from 'next';
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
-interface Props {
-  searchParams: Promise<{ cat?: string }>;
-}
+export const metadata: Metadata = { title: 'News' };
 
-export default async function NewsPage({ searchParams }: Props) {
-  const params = await searchParams;
-  const category = params.cat || 'news';
-
-  let query = supabaseClient
-    .from('articles')
-    .select('*')
-    .eq('status', 'published')
-    .order('created_at', { ascending: false });
-
-  if (category !== 'news') {
-    query = query.eq('category', category);
-  }
-
-  const { data: articles } = await query.limit(20);
-
-  const articleList = articles || [];
-
-  const categoryColors: Record<string, string> = {
-    news: 'bg-[#e63946]',
-    business: 'bg-[#2563eb]',
-    sports: 'bg-[#059669]',
-    education: 'bg-[#7c3aed]',
-    lifestyle: 'bg-[#db2777]',
-    health: 'bg-[#0891b2]',
-    opinion: 'bg-[#ea580c]',
-    international: 'bg-[#4f46e5]',
-  };
-
-  const categories = [
-    { key: 'news', label: 'All News' },
-    { key: 'business', label: 'Business' },
-    { key: 'sports', label: 'Sports' },
-    { key: 'education', label: 'Education' },
-    { key: 'lifestyle', label: 'Lifestyle' },
-    { key: 'health', label: 'Health' },
-    { key: 'opinion', label: 'Opinion' },
-  ];
+export default async function NewsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ category?: string; q?: string }>;
+}) {
+  const { category, q } = await searchParams;
+  const articles = await getArticles({ category, q, limit: 60 });
 
   return (
-    <>
-      <Header />
-      <BriefSlider />
+    <div className="max-w-7xl mx-auto px-4 mt-8">
+      <h1 className="text-3xl font-extrabold text-coast-navy border-l-4 border-coast-red pl-3 mb-6">
+        {q ? `Search: “${q}”` : category || 'All News'}
+      </h1>
 
-      <section className="bg-gradient-to-br from-[#0a1628] to-[#1e3a5f] py-16 text-white">
-        <div className="max-w-[1400px] mx-auto px-6">
-          <h1 className="text-[42px] font-bold mb-3 font-[var(--font-heading)]">{category.charAt(0).toUpperCase() + category.slice(1)}</h1>
-          <p className="text-lg text-white/70">Breaking news and in-depth reporting from Kenya&apos;s coast</p>
-          <div className="flex gap-3 mt-6 flex-wrap">
-            {categories.map((cat) => (
-              <Link
-                key={cat.key}
-                href={`/news?cat=${cat.key}`}
-                className={`inline-flex items-center gap-2 px-6 py-2.5 rounded-lg font-semibold text-sm transition-all ${
-                  category === cat.key
-                    ? 'bg-[#e63946] text-white'
-                    : 'border-2 border-white/30 text-white bg-transparent hover:border-[#c9a227] hover:text-[#c9a227]'
-                }`}
-              >
-                {cat.label}
-              </Link>
-            ))}
-          </div>
+      {/* Category filter */}
+      <div className="flex flex-wrap gap-2 mb-8">
+        <Link
+          href="/news"
+          className={`px-4 py-2 rounded-full text-sm font-semibold transition ${
+            !category ? 'bg-coast-navy text-white' : 'bg-white text-coast-navy hover:bg-gray-100'
+          }`}
+        >
+          All
+        </Link>
+        {ARTICLE_CATEGORIES.map((c) => (
+          <Link
+            key={c}
+            href={`/news?category=${encodeURIComponent(c)}`}
+            className={`px-4 py-2 rounded-full text-sm font-semibold transition ${
+              category === c ? 'bg-coast-navy text-white' : 'bg-white text-coast-navy hover:bg-gray-100'
+            }`}
+          >
+            {c}
+          </Link>
+        ))}
+      </div>
+
+      {articles.length === 0 ? (
+        <div className="bg-white rounded-2xl p-12 text-center text-gray-500">
+          No articles found{q ? ` for “${q}”` : category ? ` in ${category}` : ''}.
         </div>
-      </section>
-
-      <section className="py-[60px]">
-        <div className="max-w-[1400px] mx-auto px-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {articleList.map((article) => (
-              <Link key={article.id} href={`/article/${article.slug}`} className="bg-white rounded-xl overflow-hidden shadow-md hover:-translate-y-1.5 hover:shadow-xl transition-all no-underline text-inherit group">
-                <div className="h-[180px] overflow-hidden relative">
-                  <img src={article.image_url || 'https://images.unsplash.com/photo-1523805009345-7448845a9e53?w=400&h=300&fit=crop'} alt={article.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                  <span className={`absolute top-3 left-3 ${categoryColors[article.category] || 'bg-[#e63946]'} text-white px-3 py-1 rounded text-[11px] font-bold uppercase`}>
-                    {article.category}
+      ) : (
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {articles.map((a) => (
+            <Link key={a.id} href={`/article/${a.slug}`} className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition group flex flex-col">
+              <div className="relative h-48 bg-coast-navy overflow-hidden">
+                {a.image_url ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={a.image_url} alt={a.title} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-white/20 text-5xl font-extrabold">C</div>
+                )}
+                <div className="absolute top-3 left-3">
+                  <span className={`${CATEGORY_COLORS[a.category] || 'bg-coast-blue'} text-white text-[11px] font-bold uppercase px-2.5 py-1 rounded`}>
+                    {a.category}
                   </span>
                 </div>
-                <div className="p-5">
-                  <h3 className="text-[17px] font-bold text-[#0a1628] mb-2.5 font-[var(--font-body)] leading-snug">{article.title}</h3>
-                  <p className="text-sm text-[#718096] leading-relaxed mb-3">{article.excerpt}</p>
-                  <div className="flex justify-between text-xs text-[#718096]">
-                    <span className="flex items-center gap-1"><Clock size={12} /> 3 hours ago</span>
-                    <span className="flex items-center gap-1"><Eye size={12} /> {article.views?.toLocaleString() || 0}</span>
-                  </div>
+              </div>
+              <div className="p-5 flex flex-col flex-1">
+                <h2 className="font-bold text-coast-navy leading-snug mb-2 line-clamp-2 group-hover:text-coast-blue transition">{a.title}</h2>
+                <p className="text-sm text-gray-500 line-clamp-3 mb-4">{a.excerpt}</p>
+                <div className="mt-auto flex items-center gap-4 text-xs text-gray-400">
+                  <span className="flex items-center gap-1"><Clock size={12} /> {timeAgo(a.created_at)}</span>
+                  <span className="flex items-center gap-1"><Eye size={12} /> {a.views}</span>
+                  <span className="ml-auto">By {a.author}</span>
                 </div>
-              </Link>
-            ))}
-          </div>
-          {articleList.length === 0 && (
-            <div className="text-center py-20 text-[#718096]">
-              <p className="text-lg">No articles found in this category yet.</p>
-            </div>
-          )}
+              </div>
+            </Link>
+          ))}
         </div>
-      </section>
-
-      <Footer />
-    </>
+      )}
+    </div>
   );
 }

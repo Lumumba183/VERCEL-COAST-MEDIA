@@ -1,58 +1,52 @@
-import { type ClassValue, clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
+export function timeAgo(dateString: string): string {
+  const date = new Date(dateString);
+  const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
+  if (seconds < 60) return 'just now';
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes} minute${minutes === 1 ? '' : 's'} ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours} hour${hours === 1 ? '' : 's'} ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 7) return `${days} day${days === 1 ? '' : 's'} ago`;
+  return date.toLocaleDateString('en-KE', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
-export function formatDate(dateStr: string): string {
-  const date = new Date(dateStr);
-  return date.toLocaleDateString('en-KE', {
+export function formatDate(dateString: string): string {
+  return new Date(dateString).toLocaleDateString('en-KE', {
     weekday: 'long',
-    year: 'numeric',
-    month: 'long',
     day: 'numeric',
+    month: 'long',
+    year: 'numeric',
   });
-}
-
-export function timeAgo(dateStr: string): string {
-  const date = new Date(dateStr);
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffMins = Math.floor(diffMs / 60000);
-  const diffHours = Math.floor(diffMins / 60);
-  const diffDays = Math.floor(diffHours / 24);
-
-  if (diffMins < 60) return `${diffMins} min ago`;
-  if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
-  if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
-  return date.toLocaleDateString('en-KE', { month: 'short', day: 'numeric' });
 }
 
 export function slugify(text: string): string {
   return text
     .toLowerCase()
-    .replace(/[^\w\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .substring(0, 100);
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/[\s_]+/g, '-')
+    .replace(/-+/g, '-')
+    .slice(0, 80);
 }
 
-export function categoryColor(category: string): string {
-  const colors: Record<string, string> = {
-    news: 'bg-accent',
-    business: 'bg-blue-600',
-    sports: 'bg-emerald-600',
-    education: 'bg-violet-600',
-    lifestyle: 'bg-pink-600',
-    health: 'bg-cyan-600',
-    opinion: 'bg-orange-600',
-    international: 'bg-indigo-600',
-  };
-  return colors[category.toLowerCase()] || 'bg-accent';
+export function stripHtml(html: string): string {
+  return html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
-export function formatNumber(num: number): string {
-  if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
-  if (num >= 1000) return (num / 1000).toFixed(1) + 'k';
-  return num.toString();
-}
+export const WHATSAPP_URL = 'https://wa.me/254106216699';
+export const CONTACT_PHONE = '+254 106 216 699';
+export const CONTACT_EMAIL = 'support@wedialai.com';
+
+export const CATEGORY_COLORS: Record<string, string> = {
+  'National News': 'bg-coast-red',
+  'County News': 'bg-coast-blue',
+  'World News': 'bg-purple-600',
+  Politics: 'bg-emerald-700',
+  Sports: 'bg-teal-600',
+  Health: 'bg-cyan-600',
+  Celebrity: 'bg-pink-600',
+  Swahili: 'bg-amber-600',
+  Community: 'bg-indigo-600',
+  Opinion: 'bg-slate-600',
+};

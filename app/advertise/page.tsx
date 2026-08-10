@@ -1,96 +1,154 @@
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import BriefSlider from '@/components/BriefSlider';
-import { Bullhorn, Check, Star } from 'lucide-react';
+'use client';
+
+import { useState } from 'react';
+import { Megaphone, Radio, Tv, Globe, CheckCircle2, Loader2 } from 'lucide-react';
+import { WHATSAPP_URL } from '@/lib/utils';
+
+const PACKAGES = [
+  {
+    icon: Radio,
+    name: 'Radio Spots',
+    price: 'From KES 15,000',
+    features: ['30-second spot on Radio Coast', 'Prime drive-time slots', 'Live presenter mentions', 'Production assistance'],
+  },
+  {
+    icon: Globe,
+    name: 'Digital Banners',
+    price: 'From KES 25,000',
+    features: ['Homepage leaderboard banner', 'Article page placements', 'Sponsored news features', 'Monthly performance report'],
+  },
+  {
+    icon: Tv,
+    name: 'Coast TV',
+    price: 'From KES 40,000',
+    features: ['Pre-roll video ads', 'Sponsored segments', 'Product placement', 'YouTube channel reach'],
+  },
+];
 
 export default function AdvertisePage() {
-  const packages = [
-    {
-      name: 'Starter',
-      price: 'KES 15,000',
-      period: 'per month',
-      features: ['Homepage banner (728x90)', '1 sponsored article', 'Social media shoutout', 'Monthly performance report'],
-      highlighted: false,
-    },
-    {
-      name: 'Business',
-      price: 'KES 50,000',
-      period: 'per month',
-      features: ['Homepage + Article sidebar banners', '4 sponsored articles', 'Radio mention (2x/week)', 'Social media campaign', 'Weekly performance report', 'Priority support'],
-      highlighted: true,
-    },
-    {
-      name: 'Enterprise',
-      price: 'KES 150,000',
-      period: 'per month',
-      features: ['All banner positions', 'Unlimited sponsored articles', 'Daily radio mentions', 'Full social media campaign', 'TV commercial slot', 'Dedicated account manager', 'Real-time analytics dashboard'],
-      highlighted: false,
-    },
-  ];
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+  const [errorMsg, setErrorMsg] = useState('');
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setStatus('sending');
+    setErrorMsg('');
+    const form = e.currentTarget;
+    const fd = new FormData(form);
+    const payload = {
+      name: fd.get('name'),
+      email: fd.get('email'),
+      phone: fd.get('phone'),
+      subject: `Advertising Enquiry: ${fd.get('package') || 'General'}`,
+      location: fd.get('company'),
+      message: fd.get('message'),
+    };
+    try {
+      const res = await fetch('/api/reports', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || 'Submission failed');
+      }
+      setStatus('sent');
+      form.reset();
+    } catch (err) {
+      setErrorMsg(err instanceof Error ? err.message : 'Submission failed');
+      setStatus('error');
+    }
+  }
 
   return (
-    <>
-      <Header />
-      <BriefSlider />
+    <div className="max-w-6xl mx-auto px-4 mt-10">
+      <div className="text-center mb-10">
+        <span className="inline-flex w-14 h-14 rounded-2xl bg-coast-gold text-coast-navy items-center justify-center mb-4">
+          <Megaphone size={26} />
+        </span>
+        <h1 className="text-3xl font-extrabold text-coast-navy">Advertise With Us</h1>
+        <p className="text-gray-500 mt-2 max-w-xl mx-auto">
+          Reach over 2 million listeners and readers across the Kenyan coast — on radio, online and on TV.
+        </p>
+      </div>
 
-      <section className="bg-gradient-to-br from-[#0a1628] to-[#1e3a5f] py-20 text-white text-center">
-        <div className="max-w-[800px] mx-auto px-6">
-          <Bullhorn size={64} className="mx-auto mb-6 text-[#c9a227]" />
-          <h1 className="text-5xl font-bold mb-4 font-[var(--font-heading)]">Advertise With Us</h1>
-          <p className="text-xl text-white/70">Connect your brand with over 500,000 monthly readers across Kenya&apos;s coast and beyond.</p>
-        </div>
-      </section>
-
-      {/* Stats */}
-      <section className="py-16">
-        <div className="max-w-[1000px] mx-auto px-6">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
-            {[
-              { value: '500K+', label: 'Monthly Readers' },
-              { value: '50K+', label: 'Radio Listeners' },
-              { value: '12.5K+', label: 'Social Followers' },
-              { value: '8+', label: 'Years of Trust' },
-            ].map((stat, i) => (
-              <div key={i}>
-                <h3 className="text-4xl font-black text-[#0a1628] mb-2">{stat.value}</h3>
-                <p className="text-[#718096] font-medium">{stat.label}</p>
-              </div>
-            ))}
+      <div className="grid md:grid-cols-3 gap-6 mb-12">
+        {PACKAGES.map(({ icon: Icon, name, price, features }) => (
+          <div key={name} className="bg-white rounded-2xl shadow-sm p-7 hover:shadow-lg transition">
+            <span className="w-12 h-12 rounded-xl bg-coast-navy text-coast-gold flex items-center justify-center mb-4">
+              <Icon size={22} />
+            </span>
+            <h2 className="font-bold text-coast-navy text-lg">{name}</h2>
+            <p className="text-coast-red font-extrabold mt-1 mb-4">{price}</p>
+            <ul className="space-y-2 text-sm text-gray-600">
+              {features.map((f) => (
+                <li key={f} className="flex items-start gap-2">
+                  <CheckCircle2 size={15} className="text-emerald-500 mt-0.5 shrink-0" /> {f}
+                </li>
+              ))}
+            </ul>
           </div>
-        </div>
-      </section>
+        ))}
+      </div>
 
-      {/* Packages */}
-      <section className="py-16 bg-[#f8f9fa]">
-        <div className="max-w-[1100px] mx-auto px-6">
-          <h2 className="section-title mb-10 text-center justify-center">Advertising Packages</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {packages.map((pkg, i) => (
-              <div key={i} className={`rounded-2xl p-8 ${pkg.highlighted ? 'bg-[#0a1628] text-white shadow-2xl scale-105' : 'bg-white shadow-lg'}`}>
-                {pkg.highlighted && <div className="flex items-center justify-center gap-1 text-[#c9a227] font-bold text-sm uppercase tracking-wider mb-4"><Star size={14} fill="#c9a227" /> Most Popular</div>}
-                <h3 className={`text-2xl font-bold mb-2 ${pkg.highlighted ? 'text-white' : 'text-[#0a1628]'}`}>{pkg.name}</h3>
-                <div className="mb-6">
-                  <span className={`text-3xl font-black ${pkg.highlighted ? 'text-[#c9a227]' : 'text-[#0a1628]'}`}>{pkg.price}</span>
-                  <span className={`text-sm ${pkg.highlighted ? 'text-white/60' : 'text-[#718096]'}`}> / {pkg.period}</span>
-                </div>
-                <ul className="space-y-3 mb-8">
-                  {pkg.features.map((feat, j) => (
-                    <li key={j} className="flex items-start gap-2 text-sm">
-                      <Check size={16} className={`shrink-0 mt-0.5 ${pkg.highlighted ? 'text-[#c9a227]' : 'text-[#059669]'}`} />
-                      <span className={pkg.highlighted ? 'text-white/80' : 'text-[#2d3748]'}>{feat}</span>
-                    </li>
-                  ))}
-                </ul>
-                <button className={`w-full py-3 rounded-lg font-semibold transition-all ${pkg.highlighted ? 'bg-[#e63946] text-white hover:bg-[#c1121f]' : 'bg-[#0a1628] text-white hover:bg-[#1e3a5f]'}`}>
-                  Get Started
-                </button>
-              </div>
-            ))}
+      <div className="grid lg:grid-cols-2 gap-8 items-start">
+        <div className="bg-coast-navy rounded-2xl p-8 text-white">
+          <h2 className="font-extrabold text-2xl mb-4">Why advertise with The Coast?</h2>
+          <ul className="space-y-3 text-white/80 text-sm">
+            <li>• 98.7 FM reaches Mombasa, Kilifi, Kwale, Malindi and Lamu</li>
+            <li>• Growing digital readership across Kenya and the diaspora</li>
+            <li>• Trusted local brand with deep community roots</li>
+            <li>• Flexible packages for SMEs and corporates alike</li>
+          </ul>
+          <a
+            href={WHATSAPP_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 bg-emerald-500 text-white font-bold px-6 py-3 rounded-full mt-6 hover:brightness-110 transition"
+          >
+            Chat with Sales on WhatsApp
+          </a>
+        </div>
+
+        {status === 'sent' ? (
+          <div className="bg-white rounded-2xl shadow-sm p-10 text-center">
+            <CheckCircle2 size={52} className="mx-auto text-emerald-500 mb-4" />
+            <h2 className="font-bold text-coast-navy text-xl mb-2">Enquiry sent!</h2>
+            <p className="text-gray-500">Our sales team will get back to you within one business day.</p>
           </div>
-        </div>
-      </section>
-
-      <Footer />
-    </>
+        ) : (
+          <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm p-7 space-y-4">
+            <h2 className="font-bold text-coast-navy text-lg">Request a Media Kit</h2>
+            <div className="grid sm:grid-cols-2 gap-4">
+              <input name="name" required placeholder="Contact person *" className="border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-coast-blue" />
+              <input name="company" placeholder="Company / Organisation" className="border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-coast-blue" />
+            </div>
+            <div className="grid sm:grid-cols-2 gap-4">
+              <input name="email" type="email" required placeholder="Email *" className="border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-coast-blue" />
+              <input name="phone" placeholder="Phone" className="border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-coast-blue" />
+            </div>
+            <select name="package" className="w-full border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-coast-blue text-gray-600">
+              <option value="">Interested package…</option>
+              <option>Radio Spots</option>
+              <option>Digital Banners</option>
+              <option>Coast TV</option>
+              <option>Custom / Multi-channel</option>
+            </select>
+            <textarea name="message" required rows={4} placeholder="Tell us about your campaign goals *" className="w-full border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-coast-blue" />
+            {status === 'error' && (
+              <p className="text-sm text-coast-red bg-red-50 rounded-lg px-4 py-2.5">{errorMsg}</p>
+            )}
+            <button
+              type="submit"
+              disabled={status === 'sending'}
+              className="w-full bg-coast-navy text-white font-bold py-3.5 rounded-xl hover:brightness-125 transition flex items-center justify-center gap-2 disabled:opacity-60"
+            >
+              {status === 'sending' ? <><Loader2 size={18} className="animate-spin" /> Sending…</> : 'Send Enquiry'}
+            </button>
+          </form>
+        )}
+      </div>
+    </div>
   );
 }
