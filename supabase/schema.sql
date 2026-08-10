@@ -121,6 +121,41 @@ create policy "public insert reports" on reports
 -- ---------- DEFAULT SETTINGS ----------
 insert into settings (key, value) values
   ('stream_url', ''),
+  ('tv_provider', 'youtube'),        -- 'youtube' or 'twitch'
   ('youtube_channel_id', ''),
+  ('twitch_channel', ''),
   ('site_tagline', 'Kenya''s Leading Coastal News, Radio & TV Platform')
 on conflict (key) do nothing;
+
+-- ---------- FIRST ADMIN ----------
+-- The first admin is created automatically on first sign-in when their email
+-- matches the ADMIN_EMAIL environment variable (smartsolutions870@gmail.com).
+-- This row pre-provisions the same admin — the Clerk user id binds
+-- automatically on first login:
+insert into app_users (id, email, full_name, role, allowed_areas)
+values ('pending:smartsolutions870@gmail.com', 'smartsolutions870@gmail.com', 'Site Administrator', 'admin', ARRAY['all'])
+on conflict (email) do update set role = 'admin', allowed_areas = ARRAY['all'];
+
+-- ---------- STORAGE: media bucket for article image uploads ----------
+insert into storage.buckets (id, name, public)
+values ('media', 'media', true)
+on conflict (id) do nothing;
+
+-- Anyone can read uploaded media (public bucket)
+drop policy if exists "public read media" on storage.objects;
+create policy "public read media" on storage.objects
+  for select using (bucket_id = 'media');
+
+-- Allow uploads from the site (article images via the admin panel)
+drop policy if exists "public upload media" on storage.objects;
+create policy "public upload media" on storage.objects
+  for insert with check (bucket_id = 'media');
+
+-- Allow replacing/removing own uploads
+drop policy if exists "public update media" on storage.objects;
+create policy "public update media" on storage.objects
+  for update using (bucket_id = 'media');
+
+drop policy if exists "public delete media" on storage.objects;
+create policy "public delete media" on storage.objects
+  for delete using (bucket_id = 'media');

@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Plus, Pencil, Trash2, Star, X, Loader2, Eye, EyeOff } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { Plus, Pencil, Trash2, Star, X, Loader2, Eye, EyeOff, UploadCloud } from 'lucide-react';
 import { ARTICLE_CATEGORIES, type Article } from '@/types';
 import { timeAgo } from '@/lib/utils';
+import { getAnonClient } from '@/lib/supabase';
 
 const EMPTY = {
   title: '',
@@ -24,6 +25,28 @@ export default function ArticlesTab() {
   const [form, setForm] = useState(EMPTY);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const [uploading, setUploading] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  async function uploadImage(file: File) {
+    setUploading(true);
+    setError('');
+    try {
+      const supabase = getAnonClient();
+      const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg';
+      const path = `articles/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+      const { error: upErr } = await supabase.storage
+        .from('media')
+        .upload(path, file, { cacheControl: '31536000', upsert: false });
+      if (upErr) throw new Error(`Upload failed: ${upErr.message}. Make sure the "media" storage bucket exists (see supabase/schema.sql).`);
+      const { data } = supabase.storage.from('media').getPublicUrl(path);
+      setForm((f) => ({ ...f, image_url: data.publicUrl }));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Image upload failed');
+    } finally {
+      setUploading(false);
+    }
+  }
 
   async function load() {
     setLoading(true);
@@ -109,12 +132,62 @@ export default function ArticlesTab() {
             <button type="button" onClick={() => setShowForm(false)} className="text-gray-400 hover:text-gray-600"><X size={20} /></button>
           </div>
           <input required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="Headline *" className="w-full border border-gray-200 rounded-lg px-4 py-2.5" />
-          <div className="grid sm:grid-cols-3 gap-4">
+          <div className="grid sm:grid-cols-2 gap-4">
             <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} className="border border-gray-200 rounded-lg px-4 py-2.5">
               {ARTICLE_CATEGORIES.map((c) => <option key={c}>{c}</option>)}
             </select>
             <input value={form.author} onChange={(e) => setForm({ ...form, author: e.target.value })} placeholder="Author" className="border border-gray-200 rounded-lg px-4 py-2.5" />
-            <input value={form.image_url} onChange={(e) => setForm({ ...form, image_url: e.target.value })} placeholder="Image URL (https://…)" className="border border-gray-200 rounded-lg px-4 py-2.5" />
+          </div>
+
+          {/* Article image — upload a file OR paste a URL */}
+          <div className="border border-dashed border-gray-300 rounded-xl p-4">
+            <p className="text-sm font-bold text-coast-navy mb-3">Article image</p>
+            <div className="flex flex-col sm:flex-row gap-4 sm:items-center">
+              {form.image_url ? (
+                <div className="relative w-36 h-24 rounded-lg overflow-hidden bg-gray-100 shrink-0">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={form.image_url} alt="Article" className="w-full h-full object-cover" />
+                  <button
+                    type="button"
+                    onClick={() => setForm({ ...form, image_url: '' })}
+                    className="absolute top-1 right-1 bg-black/60 text-white rounded-full p-1 hover:bg-black/80"
+                    title="Remove image"
+                  >
+                    <X size={12} />
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  disabled={uploading}
+                  onClick={() => fileRef.current?.click()}
+                  className="w-36 h-24 rounded-lg bg-coast-light flex flex-col items-center justify-center gap-1.5 text-coast-blue hover:bg-blue-50 transition shrink-0 disabled:opacity-60"
+                >
+                  {uploading ? <Loader2 size={20} className="animate-spin" /> : <UploadCloud size={20} />}
+                  <span className="text-xs font-bold">{uploading ? 'Uploading…' : 'Upload image'}</span>
+                </button>
+              )}
+              <input
+                ref={fileRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  if (f) uploadImage(f);
+                  e.target.value = '';
+                }}
+              />
+              <div className="flex-1">
+                <input
+                  value={form.image_url}
+                  onChange={(e) => setForm({ ...form, image_url: e.target.value })}
+                  placeholder="…or paste an image URL (https://…)"
+                  className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm"
+                />
+                <p className="text-xs text-gray-400 mt-1.5">Upload a file from your device, or paste a direct image link.</p>
+              </div>
+            </div>
           </div>
           <textarea value={form.excerpt} onChange={(e) => setForm({ ...form, excerpt: e.target.value })} placeholder="Excerpt (shown in listings)" rows={2} className="w-full border border-gray-200 rounded-lg px-4 py-2.5" />
           <textarea value={form.content} onChange={(e) => setForm({ ...form, content: e.target.value })} placeholder="Article body — HTML supported (<p>, <h2>, <ul>…)" rows={10} className="w-full border border-gray-200 rounded-lg px-4 py-2.5 font-mono text-sm" />

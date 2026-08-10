@@ -1,25 +1,30 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Plus, Trash2, ArrowUp, ArrowDown, Loader2, Sparkles, Eye, EyeOff } from 'lucide-react';
-import type { BriefItem } from '@/types';
+import { Plus, Trash2, ArrowUp, ArrowDown, Loader2, Sparkles, Eye, EyeOff, Newspaper } from 'lucide-react';
+import type { Article, BriefItem } from '@/types';
 
 export default function BriefPage() {
   const [items, setItems] = useState<BriefItem[]>([]);
+  const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [text, setText] = useState('');
   const [saving, setSaving] = useState(false);
 
   async function load() {
     setLoading(true);
-    const res = await fetch('/api/brief?all=1');
-    if (res.ok) setItems(await res.json());
+    const [briefRes, artRes] = await Promise.all([
+      fetch('/api/brief?all=1'),
+      fetch('/api/articles?all=1'),
+    ]);
+    if (briefRes.ok) setItems(await briefRes.json());
+    if (artRes.ok) setArticles(await artRes.json());
     setLoading(false);
   }
 
   useEffect(() => { load(); }, []);
 
-  async function add(e: React.FormEvent) {
+  async function addManual(e: React.FormEvent) {
     e.preventDefault();
     if (!text.trim()) return;
     setSaving(true);
@@ -29,6 +34,20 @@ export default function BriefPage() {
       body: JSON.stringify({ text: text.trim() }),
     });
     setText('');
+    setSaving(false);
+    load();
+  }
+
+  async function addFromArticle(articleId: string) {
+    if (!articleId) return;
+    const article = articles.find((a) => a.id === articleId);
+    if (!article) return;
+    setSaving(true);
+    await fetch('/api/brief', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: article.title, article_id: article.id }),
+    });
     setSaving(false);
     load();
   }
@@ -81,31 +100,61 @@ export default function BriefPage() {
   return (
     <div>
       <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
-        <h2 className="font-extrabold text-coast-navy text-xl">Brief Slider ({items.length})</h2>
+        <h2 className="font-extrabold text-coast-navy text-xl">Breaking News Ticker ({items.length})</h2>
         <button
           onClick={autofill}
           disabled={saving}
           className="bg-coast-navy text-white font-bold px-4 py-2.5 rounded-lg flex items-center gap-2 text-sm hover:brightness-125 disabled:opacity-60"
         >
-          <Sparkles size={15} /> Auto-fill from Latest Articles
+          <Sparkles size={15} /> Auto-fill 5 Latest Articles
         </button>
       </div>
 
-      <form onSubmit={add} className="bg-white rounded-2xl shadow-sm p-5 mb-6 flex gap-3">
-        <input
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          placeholder="Add a manual ticker item…"
-          className="flex-1 border border-gray-200 rounded-lg px-4 py-2.5"
-        />
-        <button disabled={saving || !text.trim()} className="bg-coast-red text-white font-bold px-5 py-2.5 rounded-lg flex items-center gap-2 text-sm disabled:opacity-60">
-          <Plus size={15} /> Add
-        </button>
-      </form>
+      <div className="grid lg:grid-cols-2 gap-5 mb-6">
+        {/* Option 1: pick from existing articles */}
+        <div className="bg-white rounded-2xl shadow-sm p-5">
+          <p className="font-bold text-coast-navy text-sm mb-3 flex items-center gap-2">
+            <Newspaper size={16} className="text-coast-blue" /> Pick from existing articles
+          </p>
+          <select
+            defaultValue=""
+            disabled={saving || articles.length === 0}
+            onChange={(e) => { addFromArticle(e.target.value); e.target.value = ''; }}
+            className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm"
+          >
+            <option value="" disabled>
+              {articles.length === 0 ? 'No articles available' : 'Select an article to add to the ticker…'}
+            </option>
+            {articles.slice(0, 100).map((a) => (
+              <option key={a.id} value={a.id}>{a.title}</option>
+            ))}
+          </select>
+          <p className="text-xs text-gray-400 mt-2">The article headline is added and linked to the story.</p>
+        </div>
+
+        {/* Option 2: write manually */}
+        <form onSubmit={addManual} className="bg-white rounded-2xl shadow-sm p-5">
+          <p className="font-bold text-coast-navy text-sm mb-3 flex items-center gap-2">
+            <Plus size={16} className="text-coast-red" /> Or write a ticker item manually
+          </p>
+          <div className="flex gap-3">
+            <input
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              placeholder="e.g. Mombasa Port records highest cargo traffic…"
+              className="flex-1 border border-gray-200 rounded-lg px-4 py-2.5 text-sm"
+            />
+            <button disabled={saving || !text.trim()} className="bg-coast-red text-white font-bold px-5 py-2.5 rounded-lg text-sm disabled:opacity-60 shrink-0">
+              Add
+            </button>
+          </div>
+          <p className="text-xs text-gray-400 mt-2">Free-text item, not linked to any article.</p>
+        </form>
+      </div>
 
       {items.length === 0 ? (
         <div className="bg-white rounded-2xl p-10 text-center text-gray-500">
-          No ticker items — auto-fill from your latest articles or add one manually.
+          No ticker items — pick an article, auto-fill, or add one manually above.
         </div>
       ) : (
         <div className="bg-white rounded-2xl shadow-sm divide-y divide-gray-50">

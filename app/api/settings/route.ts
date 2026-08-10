@@ -22,7 +22,7 @@ export async function PUT(req: NextRequest) {
   if (!auth.authorized) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const body = await req.json();
-  const allowed = ['stream_url', 'youtube_channel_id', 'site_tagline'];
+  const allowed = ['stream_url', 'tv_provider', 'youtube_channel_id', 'twitch_channel', 'site_tagline'];
   const rows = Object.entries(body)
     .filter(([k, v]) => allowed.includes(k) && typeof v === 'string')
     .map(([key, value]) => ({ key, value: value as string }));
