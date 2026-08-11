@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { UserButton } from '@clerk/nextjs';
 import { getIdentity, canAccess } from '@/lib/admin';
-import { LayoutDashboard, Users, ListOrdered, Settings, ShieldAlert } from 'lucide-react';
+import { LayoutDashboard, Users, ListOrdered, Settings, ShieldAlert, Megaphone } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
@@ -9,6 +9,7 @@ const NAV = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard, area: null },
   { href: '/admin/users', label: 'Users', icon: Users, area: 'users' },
   { href: '/admin/brief', label: 'Brief Slider', icon: ListOrdered, area: 'brief' },
+  { href: '/admin/ads', label: 'Adverts', icon: Megaphone, area: 'adverts' },
   { href: '/admin/settings', label: 'Settings', icon: Settings, area: 'settings' },
 ];
 

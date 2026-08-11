@@ -156,3 +156,25 @@ export async function authorizeArea(area: string): Promise<AuthResult> {
     return deny;
   }
 }
+
+// ---------- Adverts (public) ----------
+
+import type { Advert } from '@/types';
+
+/** Active adverts within their date window, for public pages. */
+export async function getActiveAdverts(): Promise<Pick<Advert, 'id' | 'title' | 'image_url' | 'link_url' | 'placement'>[]> {
+  try {
+    const supabase = getAnonClient();
+    const today = new Date().toISOString().slice(0, 10);
+    const { data, error } = await supabase
+      .from('adverts')
+      .select('id, title, image_url, link_url, placement')
+      .eq('active', true)
+      .lte('start_date', today)
+      .gte('end_date', today);
+    if (error) return [];
+    return data || [];
+  } catch {
+    return [];
+  }
+}

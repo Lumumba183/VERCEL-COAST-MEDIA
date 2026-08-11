@@ -173,3 +173,25 @@ create index if not exists idx_page_views_created on page_views (created_at desc
 create index if not exists idx_page_views_lastseen on page_views (last_seen desc);
 -- No public RLS access needed: all reads/writes go through the service client.
 alter table page_views enable row level security;
+
+-- ============ ADVERTS (added Aug 2026) ============
+create table if not exists adverts (
+  id             uuid primary key default gen_random_uuid(),
+  title          text not null,
+  client_name    text not null,
+  client_contact text,
+  image_url      text not null,
+  link_url       text,
+  placement      text not null default 'sidebar' check (placement in ('leaderboard','sidebar','article-bottom')),
+  start_date     date not null default current_date,
+  end_date       date not null default (current_date + 30),
+  active         boolean not null default true,
+  notes          text,
+  created_at     timestamptz not null default now()
+);
+create index if not exists idx_adverts_window on adverts (active, start_date, end_date);
+alter table adverts enable row level security;
+-- Public can read only live adverts within their run window
+drop policy if exists "public read live adverts" on adverts;
+create policy "public read live adverts" on adverts
+  for select using (active = true and start_date <= current_date and end_date >= current_date);

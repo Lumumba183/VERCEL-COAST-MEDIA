@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Clock, MessageSquare, Eye, Radio, PlayCircle, CloudSun, TrendingUp, ArrowRight, Tv, Megaphone, PenSquare } from 'lucide-react';
 import { getArticles } from '@/lib/data';
+import AdSlot from '@/components/AdSlot';
 import { timeAgo, CATEGORY_COLORS, WHATSAPP_URL } from '@/lib/utils';
 import type { Article } from '@/types';
 
@@ -142,9 +143,15 @@ export default async function HomePage() {
                 ))}
               </div>
             )}
+
+            {/* Sidebar advert */}
+            <AdSlot placement="sidebar" />
           </div>
         </div>
       </section>
+
+      {/* Leaderboard advert */}
+      <AdSlot placement="leaderboard" className="max-w-7xl mx-auto px-4 mt-8" />
 
       {/* Latest news */}
       <section className="max-w-7xl mx-auto px-4 mt-10">

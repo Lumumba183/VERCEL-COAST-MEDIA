@@ -97,3 +97,20 @@ export const DAYS_OF_WEEK = [
 ];
 
 export const ADMIN_AREAS = ['articles', 'schedule', 'reports', 'users', 'brief', 'settings', 'all'];
+
+export type AdPlacement = 'leaderboard' | 'sidebar' | 'article-bottom';
+
+export interface Advert {
+  id: string;
+  title: string;
+  client_name: string;
+  client_contact: string | null;
+  image_url: string;
+  link_url: string | null;
+  placement: AdPlacement;
+  start_date: string;   // ISO date (yyyy-mm-dd)
+  end_date: string;     // ISO date — advert auto-hides after this
+  active: boolean;
+  notes: string | null;
+  created_at: string;
+}

@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Clock, Eye, ArrowLeft, User } from 'lucide-react';
 import { getArticleBySlug, getArticles } from '@/lib/data';
+import AdSlot from '@/components/AdSlot';
 import { formatDate, timeAgo, CATEGORY_COLORS, stripHtml } from '@/lib/utils';
 import type { Metadata } from 'next';
 
@@ -62,6 +63,8 @@ export default async function ArticlePage({ params }: Props) {
           <div className="article-body" dangerouslySetInnerHTML={{ __html: article.content }} />
         </div>
       </article>
+
+      <AdSlot placement="article-bottom" className="mt-8" />
 
       {related.length > 0 && (
         <div className="mt-10">
