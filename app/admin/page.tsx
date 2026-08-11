@@ -5,6 +5,7 @@ import { Newspaper, CalendarDays, Inbox, LayoutDashboard } from 'lucide-react';
 import ArticlesTab from '@/components/admin/ArticlesTab';
 import ScheduleTab from '@/components/admin/ScheduleTab';
 import ReportsTab from '@/components/admin/ReportsTab';
+import AnalyticsPanel from '@/components/admin/AnalyticsPanel';
 import type { Article, Report, ScheduleItem } from '@/types';
 
 type Tab = 'dashboard' | 'articles' | 'schedule' | 'reports';
@@ -70,6 +71,7 @@ export default function AdminPage() {
               </button>
             ))}
           </div>
+          <AnalyticsPanel />
           <div className="bg-white rounded-2xl shadow-sm p-6">
             <h3 className="font-bold text-coast-navy mb-3">Quick guide</h3>
             <ul className="text-sm text-gray-500 space-y-2">

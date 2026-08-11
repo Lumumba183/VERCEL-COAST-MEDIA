@@ -5,6 +5,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import PlayerBar from '@/components/PlayerBar';
 import BriefSlider from '@/components/BriefSlider';
+import AnalyticsTracker from '@/components/AnalyticsTracker';
 
 export const metadata: Metadata = {
   title: {
@@ -31,6 +32,7 @@ export default function RootLayout({
           <main className="flex-1 pb-16">{children}</main>
           <Footer />
           <PlayerBar />
+          <AnalyticsTracker />
         </body>
       </html>
     </ClerkProvider>

@@ -159,3 +159,17 @@ create policy "public update media" on storage.objects
 drop policy if exists "public delete media" on storage.objects;
 create policy "public delete media" on storage.objects
   for delete using (bucket_id = 'media');
+
+-- ============ ANALYTICS (added Aug 2026) ============
+create table if not exists page_views (
+  id          uuid primary key default gen_random_uuid(),
+  visitor_id  text not null,
+  path        text not null default '/',
+  created_at  timestamptz not null default now(),
+  last_seen   timestamptz not null default now()
+);
+create index if not exists idx_page_views_visitor on page_views (visitor_id, created_at desc);
+create index if not exists idx_page_views_created on page_views (created_at desc);
+create index if not exists idx_page_views_lastseen on page_views (last_seen desc);
+-- No public RLS access needed: all reads/writes go through the service client.
+alter table page_views enable row level security;
