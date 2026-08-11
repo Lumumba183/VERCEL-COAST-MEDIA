@@ -31,11 +31,14 @@ export async function getArticles(opts: {
 export async function getArticleBySlug(slug: string): Promise<Article | null> {
   try {
     const supabase = getAnonClient();
-    const { data } = await supabase
-      .from('articles')
-      .select('*')
-      .or(`slug.eq.${slug},id.eq.${slug}`)
-      .single();
+    // Only compare id when the param is a UUID — PostgREST rejects
+    // non-UUID values against a uuid column with error 22P02 (HTTP 400).
+    const isUuid = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(slug);
+    let query = supabase.from('articles').select('*');
+    query = isUuid
+      ? query.or(`slug.eq.${slug},id.eq.${slug}`)
+      : query.eq('slug', slug);
+    const { data } = await query.single();
     return (data as Article) || null;
   } catch {
     return null;
