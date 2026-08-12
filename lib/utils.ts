@@ -34,9 +34,14 @@ export function stripHtml(html: string): string {
   return html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
-export const WHATSAPP_URL = 'https://wa.me/254106216699';
-export const CONTACT_PHONE = '+254 106 216 699';
-export const CONTACT_EMAIL = 'support@wedialai.com';
+export const WHATSAPP_URL = 'https://wa.me/254720870176';
+export const CONTACT_PHONE = '+254 720 870 176';
+export const CONTACT_EMAIL = 'thecoastnewspaper@gmail.com';
+
+export const SOCIAL_LINKS = {
+  tiktok: 'https://www.tiktok.com/@the.coast.media.g',
+  facebook: 'https://www.facebook.com/share/1AmCXAK9fa/',
+};
 
 export const CATEGORY_COLORS: Record<string, string> = {
   'National News': 'bg-coast-red',

@@ -19,7 +19,7 @@ const PACKAGES = [
   },
   {
     icon: Tv,
-    name: 'Coast TV',
+    name: 'TV Coast',
     price: 'From KES 40,000',
     features: ['Pre-roll video ads', 'Sponsored segments', 'Product placement', 'YouTube channel reach'],
   },
@@ -132,7 +132,7 @@ export default function AdvertisePage() {
               <option value="">Interested package…</option>
               <option>Radio Spots</option>
               <option>Digital Banners</option>
-              <option>Coast TV</option>
+              <option>TV Coast</option>
               <option>Custom / Multi-channel</option>
             </select>
             <textarea name="message" required rows={4} placeholder="Tell us about your campaign goals *" className="w-full border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-coast-blue" />

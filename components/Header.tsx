@@ -14,7 +14,7 @@ const NAV = [
   { href: '/news', label: 'News', icon: Newspaper },
   { href: '/schedule', label: 'Schedule', icon: CalendarDays },
   { href: '/listen', label: 'Radio', icon: Radio },
-  { href: '/tv', label: 'Coast TV', icon: Tv },
+  { href: '/tv', label: 'TV Coast', icon: Tv },
   { href: '/advertise', label: 'Advertise', icon: Megaphone },
   { href: '/about', label: 'About', icon: Info },
 ];
@@ -56,9 +56,8 @@ export default function Header() {
       <div className="bg-coast-navy border-t border-white/10">
         <div className="max-w-7xl mx-auto px-4 flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-3">
-            <span className="w-10 h-10 rounded-xl bg-gradient-to-br from-coast-blue to-sky-400 flex items-center justify-center text-white font-extrabold text-xl">
-              C
-            </span>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo.png" alt="The Coast Media Group" className="h-12 w-12 rounded-xl object-contain bg-white/95 p-0.5" />
             <span className="leading-tight">
               <span className="block text-white font-extrabold text-xl tracking-tight">The Coast</span>
               <span className="block text-coast-gold text-[10px] font-bold tracking-[0.3em]">MEDIA GROUP</span>

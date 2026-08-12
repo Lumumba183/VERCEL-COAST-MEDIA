@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     template: '%s | The Coast Media Group',
   },
   description:
-    "Kenya's leading coastal news, radio and TV platform. Breaking news, Radio Coast live, Coast TV, e-paper and advertising opportunities.",
+    "Kenya's leading coastal news, radio and TV platform. Breaking news, Radio Coast live, TV Coast, e-paper and advertising opportunities.",
   openGraph: {
     siteName: 'The Coast Media Group',
     type: 'website',

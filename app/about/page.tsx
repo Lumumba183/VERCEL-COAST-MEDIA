@@ -7,7 +7,7 @@ export const metadata: Metadata = { title: 'About Us' };
 const TEAM = [
   { name: 'Amina Juma', role: 'Managing Editor' },
   { name: 'DJ Kipawa', role: 'Head of Radio' },
-  { name: 'Baraka Mwaura', role: 'Head of Coast TV' },
+  { name: 'Baraka Mwaura', role: 'Head of TV Coast' },
   { name: 'Zawadi Kombo', role: 'Senior Political Correspondent' },
   { name: 'Hassan Salim', role: 'Sports Editor' },
   { name: 'Neema Charo', role: 'County News Correspondent' },

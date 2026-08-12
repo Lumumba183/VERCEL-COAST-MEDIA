@@ -176,7 +176,7 @@ export default async function HomePage() {
       <section className="max-w-7xl mx-auto px-4 mt-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {[
           { href: '/listen', icon: Radio, title: 'Radio Coast', desc: 'Stream live radio 24/7', color: 'bg-coast-red' },
-          { href: '/tv', icon: Tv, title: 'Coast TV', desc: 'Watch our video content', color: 'bg-coast-blue' },
+          { href: '/tv', icon: Tv, title: 'TV Coast', desc: 'Watch our video content', color: 'bg-coast-blue' },
           { href: '/report', icon: PenSquare, title: 'Submit a Story', desc: 'Tip off our news desk', color: 'bg-emerald-600' },
           { href: '/advertise', icon: Megaphone, title: 'Advertise', desc: 'Reach coastal audiences', color: 'bg-coast-gold' },
         ].map(({ href, icon: Icon, title, desc, color }) => (

@@ -74,7 +74,7 @@ export default function SettingsPage() {
 
         {/* TV provider */}
         <div className="bg-white rounded-2xl shadow-sm p-7">
-          <h3 className="font-bold text-coast-navy mb-4 flex items-center gap-2"><Tv size={18} className="text-coast-blue" /> Coast TV — Live Video</h3>
+          <h3 className="font-bold text-coast-navy mb-4 flex items-center gap-2"><Tv size={18} className="text-coast-blue" /> TV Coast — Live Video</h3>
           <p className="text-sm font-semibold text-gray-600 mb-2">Choose your live video platform — tick one</p>
           <div className="grid grid-cols-2 gap-3 mb-5">
             {[

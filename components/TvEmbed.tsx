@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { MonitorPlay, PlayCircle, Loader2 } from 'lucide-react';
 
 /**
- * Coast TV embed — supports YouTube or Twitch, chosen in Admin → Settings.
+ * TV Coast embed — supports YouTube or Twitch, chosen in Admin → Settings.
  * Accepts a plain channel id/name OR a full channel URL in either field.
  */
 export default function TvEmbed() {
@@ -20,7 +20,7 @@ export default function TvEmbed() {
   if (settings === null) {
     return (
       <div className="bg-white rounded-2xl shadow-sm p-12 text-center text-gray-400">
-        <Loader2 className="animate-spin inline mr-2" /> Loading Coast TV…
+        <Loader2 className="animate-spin inline mr-2" /> Loading TV Coast…
       </div>
     );
   }
@@ -45,12 +45,12 @@ export default function TvEmbed() {
             src={`https://player.twitch.tv/?channel=${encodeURIComponent(twChannel)}&parent=${parent}&autoplay=false`}
             className="w-full h-full"
             allowFullScreen
-            title="Coast TV — Twitch Live"
+            title="TV Coast — Twitch Live"
           />
         </div>
         <div className="p-5 flex items-center justify-between">
           <div>
-            <h2 className="font-bold text-coast-navy">Coast TV Live — Twitch</h2>
+            <h2 className="font-bold text-coast-navy">TV Coast Live — Twitch</h2>
             <p className="text-sm text-gray-500">Broadcasting from Mombasa, Kenya</p>
           </div>
           <a
@@ -75,12 +75,12 @@ export default function TvEmbed() {
             className="w-full h-full"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
-            title="Coast TV — YouTube Live"
+            title="TV Coast — YouTube Live"
           />
         </div>
         <div className="p-5 flex items-center justify-between">
           <div>
-            <h2 className="font-bold text-coast-navy">Coast TV Live — YouTube</h2>
+            <h2 className="font-bold text-coast-navy">TV Coast Live — YouTube</h2>
             <p className="text-sm text-gray-500">Broadcasting from Mombasa, Kenya</p>
           </div>
           <a
@@ -101,7 +101,7 @@ export default function TvEmbed() {
       <MonitorPlay size={48} className="mx-auto text-gray-300 mb-4" />
       <h2 className="font-bold text-coast-navy text-lg mb-2">Channel not configured yet</h2>
       <p className="text-gray-500 max-w-md mx-auto">
-        Staff can choose YouTube or Twitch and paste the channel link in <strong>Admin → Settings</strong> to embed the Coast TV live stream here.
+        Staff can choose YouTube or Twitch and paste the channel link in <strong>Admin → Settings</strong> to embed the TV Coast live stream here.
       </p>
     </div>
   );
