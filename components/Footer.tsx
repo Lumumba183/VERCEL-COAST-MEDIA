@@ -24,7 +24,7 @@ export default function Footer() {
         <div>
           <div className="flex items-center gap-3 mb-4">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logo.png" alt="The Coast Media Group" className="h-11 w-11 rounded-xl object-contain bg-white/95 p-0.5" />
+            <img src="/logo.png" alt="The Coast Media Group" className="h-14 w-14 rounded-full object-cover shadow-md" />
             <span className="leading-tight">
               <span className="block font-extrabold text-xl">The Coast</span>
               <span className="block text-coast-gold text-[10px] font-bold tracking-[0.3em]">MEDIA GROUP</span>

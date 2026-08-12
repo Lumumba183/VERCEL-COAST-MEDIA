@@ -57,7 +57,7 @@ export default function Header() {
         <div className="max-w-7xl mx-auto px-4 flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-3">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logo.png" alt="The Coast Media Group" className="h-12 w-12 rounded-xl object-contain bg-white/95 p-0.5" />
+            <img src="/logo.png" alt="The Coast Media Group" className="h-14 w-14 rounded-full object-cover shadow-md ring-2 ring-white/25" />
             <span className="leading-tight">
               <span className="block text-white font-extrabold text-xl tracking-tight">The Coast</span>
               <span className="block text-coast-gold text-[10px] font-bold tracking-[0.3em]">MEDIA GROUP</span>
