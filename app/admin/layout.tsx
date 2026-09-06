@@ -20,14 +20,14 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     return (
       <div className="max-w-lg mx-auto px-4 mt-16">
         <div className="bg-white rounded-2xl shadow-sm p-10 text-center">
-          <ShieldAlert size={48} className="mx-auto text-coast-red mb-4" />
-          <h1 className="font-extrabold text-coast-navy text-2xl mb-2">Access Denied</h1>
+          <ShieldAlert size={48} className="mx-auto text-newsbooth-red mb-4" />
+          <h1 className="font-extrabold text-newsbooth-navy text-2xl mb-2">Access Denied</h1>
           <p className="text-gray-500 text-sm leading-relaxed">
             {identity
               ? `Signed in as ${identity.email}, but this account has no staff role yet. An administrator must add you in Supabase → app_users (role: admin or editor).`
               : 'Please sign in with a staff account to access the admin panel.'}
           </p>
-          <Link href="/" className="inline-block mt-6 text-coast-blue font-semibold text-sm">
+          <Link href="/" className="inline-block mt-6 text-newsbooth-blue font-semibold text-sm">
             ← Back to homepage
           </Link>
         </div>
@@ -45,7 +45,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           <div className="bg-white rounded-2xl shadow-sm p-5 lg:sticky lg:top-32">
             <div className="flex items-center justify-between mb-5 pb-4 border-b border-gray-100">
               <div>
-                <p className="font-extrabold text-coast-navy">Admin Panel</p>
+                <p className="font-extrabold text-newsbooth-navy">Admin Panel</p>
                 <p className="text-xs text-gray-400 capitalize">{identity.appUser?.role} · {identity.email}</p>
               </div>
               <UserButton />
@@ -55,7 +55,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
                 <Link
                   key={href}
                   href={href}
-                  className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold text-gray-600 hover:bg-coast-light hover:text-coast-navy transition whitespace-nowrap"
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold text-gray-600 hover:bg-newsbooth-light hover:text-newsbooth-navy transition whitespace-nowrap"
                 >
                   <Icon size={17} /> {label}
                 </Link>
