@@ -1,6 +1,6 @@
-# The Coast Media Group — Vercel + Supabase + Clerk
+# The News Booth — Vercel + Supabase + Clerk
 
-Kenya's leading coastal news, radio and TV platform, rebuilt as a full-stack
+Kenya's leading news, radio and TV platform, rebuilt as a full-stack
 **Next.js 15 (App Router) + TypeScript + Tailwind CSS** application with
 **Clerk** authentication and a **Supabase** (PostgreSQL) database, ready for
 one-click deployment on **Vercel**.
@@ -8,8 +8,8 @@ one-click deployment on **Vercel**.
 ## Features
 
 - **News platform** — articles with categories, featured homepage hero, related stories, search
-- **Radio Coast** — persistent bottom audio player + dedicated Listen page (stream URL set in Admin → Settings)
-- **Coast TV** — YouTube live-stream embed (channel ID set in Admin → Settings)
+- **Live Radio** — persistent bottom audio player + dedicated Listen page (stream URL set in Admin → Settings)
+- **TV Live** — YouTube live-stream embed (channel ID set in Admin → Settings)
 - **Programme Schedule** — weekly line-up, managed from the admin panel
 - **Submit a Story** — public tips land in the admin Reports inbox
 - **Advertise** — packages page with enquiry form
@@ -26,6 +26,7 @@ one-click deployment on **Vercel**.
 | Styling | Tailwind CSS |
 | Auth | Clerk |
 | Database | Supabase (PostgreSQL) |
+| Email | Resend |
 | Hosting | Vercel |
 | Icons | Lucide React |
 
@@ -43,7 +44,12 @@ one-click deployment on **Vercel**.
 1. Create an application at [clerk.com](https://clerk.com) (Email + Password recommended).
 2. From **API Keys** copy the publishable key and secret key.
 
-### 3. Environment variables
+### 3. Resend (for contact form emails)
+
+1. Sign up at [resend.com](https://resend.com).
+2. Get your API key and add it to environment variables as `RESEND_API_KEY`.
+
+### 4. Environment variables
 
 Copy `.env.local.example` to `.env.local` and fill in:
 
@@ -87,8 +93,8 @@ npm run dev
 │   ├── api/                # API routes: articles, schedule, reports, settings, users, brief
 │   ├── article/[id]/       # Article detail page
 │   ├── news/               # News listing + category filter + search
-│   ├── listen/             # Radio Coast live page
-│   ├── tv/                 # Coast TV page
+│   ├── listen/             # Live Radio live page
+│   ├── tv/                 # TV Live page
 │   ├── schedule/           # Programme schedule
 │   ├── advertise/          # Advertising packages + enquiry form
 │   ├── report/             # Public story submission
@@ -115,5 +121,5 @@ npm run dev
 
 ---
 
-**The Coast Media Group** — Phone: +254 106 216 699 · Email: support@wedialai.com ·
-WhatsApp: [Click to Chat](https://wa.me/254106216699) · Built by NexaFlow Digital
+**The News Booth** — Phone: +254 750 777 777 · Email: info.newsbooth@gmail.com ·
+WhatsApp: [Click to Chat](https://wa.me/254106216699) · Built with passion for journalism
