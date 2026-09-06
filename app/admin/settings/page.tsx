@@ -8,6 +8,7 @@ export default function SettingsPage() {
     stream_url: '',
     tv_provider: 'youtube',
     youtube_channel_id: '',
+    youtube_video_url: '',
     twitch_channel: '',
     site_tagline: '',
   });
@@ -24,6 +25,7 @@ export default function SettingsPage() {
           stream_url: data.stream_url || '',
           tv_provider: data.tv_provider === 'twitch' ? 'twitch' : 'youtube',
           youtube_channel_id: data.youtube_channel_id || '',
+          youtube_video_url: data.youtube_video_url || '',
           twitch_channel: data.twitch_channel || '',
           site_tagline: data.site_tagline || '',
         })
@@ -55,11 +57,11 @@ export default function SettingsPage() {
 
   return (
     <div>
-      <h2 className="font-extrabold text-coast-navy text-xl mb-5">Site Settings</h2>
+      <h2 className="font-extrabold text-newsbooth-navy text-xl mb-5">Site Settings</h2>
       <form onSubmit={save} className="space-y-6 max-w-2xl">
         {/* Radio stream */}
         <div className="bg-white rounded-2xl shadow-sm p-7">
-          <h3 className="font-bold text-coast-navy mb-4 flex items-center gap-2"><Radio size={18} className="text-coast-red" /> Radio Coast — Live Stream</h3>
+          <h3 className="font-bold text-newsbooth-navy mb-4 flex items-center gap-2"><Radio size={18} className="text-newsbooth-red" /> Live Radio — Live Stream</h3>
           <label className="block text-sm font-semibold text-gray-600 mb-1.5">Stream URL</label>
           <input
             value={form.stream_url}
@@ -74,7 +76,7 @@ export default function SettingsPage() {
 
         {/* TV provider */}
         <div className="bg-white rounded-2xl shadow-sm p-7">
-          <h3 className="font-bold text-coast-navy mb-4 flex items-center gap-2"><Tv size={18} className="text-coast-blue" /> TV Coast — Live Video</h3>
+          <h3 className="font-bold text-newsbooth-navy mb-4 flex items-center gap-2"><Tv size={18} className="text-newsbooth-blue" /> TV Live — Live Video</h3>
           <p className="text-sm font-semibold text-gray-600 mb-2">Choose your live video platform — tick one</p>
           <div className="grid grid-cols-2 gap-3 mb-5">
             {[
@@ -84,7 +86,7 @@ export default function SettingsPage() {
               <label
                 key={p.id}
                 className={`flex items-start gap-3 border-2 rounded-xl p-4 cursor-pointer transition ${
-                  form.tv_provider === p.id ? 'border-coast-blue bg-blue-50/50' : 'border-gray-200 hover:border-gray-300'
+                  form.tv_provider === p.id ? 'border-newsbooth-blue bg-blue-50/50' : 'border-gray-200 hover:border-gray-300'
                 }`}
               >
                 <input
@@ -95,7 +97,7 @@ export default function SettingsPage() {
                   className="mt-1"
                 />
                 <span>
-                  <span className="block font-bold text-coast-navy text-sm">{p.label}</span>
+                  <span className="block font-bold text-newsbooth-navy text-sm">{p.label}</span>
                   <span className="block text-xs text-gray-400">{p.desc}</span>
                 </span>
               </label>
@@ -103,17 +105,33 @@ export default function SettingsPage() {
           </div>
 
           {form.tv_provider === 'youtube' ? (
-            <div>
-              <label className="block text-sm font-semibold text-gray-600 mb-1.5">YouTube Channel ID or link</label>
-              <input
-                value={form.youtube_channel_id}
-                onChange={(e) => setForm({ ...form, youtube_channel_id: e.target.value })}
-                placeholder="UCxxxxxxxxxxxxxxxx  or  https://www.youtube.com/@YourChannel"
-                className="w-full border border-gray-200 rounded-lg px-4 py-2.5"
-              />
-              <p className="text-xs text-gray-400 mt-1.5">
-                Paste the channel ID or the full channel link — the /tv page embeds its live stream.
-              </p>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-600 mb-1.5">YouTube Channel ID or link (for LIVE stream)</label>
+                <input
+                  value={form.youtube_channel_id}
+                  onChange={(e) => setForm({ ...form, youtube_channel_id: e.target.value })}
+                  placeholder="UCxxxxxxxxxxxxxxxx  or  https://www.youtube.com/@YourChannel"
+                  className="w-full border border-gray-200 rounded-lg px-4 py-2.5"
+                />
+                <p className="text-xs text-gray-400 mt-1.5">
+                  Paste the channel ID or full channel link — the /tv page embeds its live stream.
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-600 mb-1.5 flex items-center gap-2">
+                  <Video size={14} /> YouTube Video URL (featured video)
+                </label>
+                <input
+                  value={form.youtube_video_url || ''}
+                  onChange={(e) => setForm({ ...form, youtube_video_url: e.target.value })}
+                  placeholder="https://www.youtube.com/watch?v=xxxxx"
+                  className="w-full border border-gray-200 rounded-lg px-4 py-2.5"
+                />
+                <p className="text-xs text-gray-400 mt-1.5">
+                  Paste a specific YouTube video link. This takes priority over the live stream.
+                </p>
+              </div>
             </div>
           ) : (
             <div>
@@ -133,7 +151,7 @@ export default function SettingsPage() {
 
         {/* General */}
         <div className="bg-white rounded-2xl shadow-sm p-7">
-          <h3 className="font-bold text-coast-navy mb-4">General</h3>
+          <h3 className="font-bold text-newsbooth-navy mb-4">General</h3>
           <label className="block text-sm font-semibold text-gray-600 mb-1.5">Site Tagline</label>
           <input
             value={form.site_tagline}
@@ -144,9 +162,9 @@ export default function SettingsPage() {
         </div>
 
         <div className="flex items-center gap-4">
-          {error && <span className="text-sm text-coast-red">{error}</span>}
+          {error && <span className="text-sm text-newsbooth-red">{error}</span>}
           {saved && <span className="text-sm text-emerald-600 flex items-center gap-1.5"><CheckCircle2 size={15} /> Saved!</span>}
-          <button disabled={saving} className="ml-auto bg-coast-navy text-white font-bold px-6 py-2.5 rounded-lg disabled:opacity-60 flex items-center gap-2">
+          <button disabled={saving} className="ml-auto bg-newsbooth-navy text-white font-bold px-6 py-2.5 rounded-lg disabled:opacity-60 flex items-center gap-2">
             {saving ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />} Save Settings
           </button>
         </div>
