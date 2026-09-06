@@ -8,7 +8,7 @@ import type { Article } from '@/types';
 export const dynamic = 'force-dynamic';
 
 function CategoryBadge({ category }: { category: string }) {
-  const color = CATEGORY_COLORS[category] || 'bg-coast-blue';
+  const color = CATEGORY_COLORS[category] || 'bg-newsbooth-blue';
   return (
     <span className={`${color} text-white text-[11px] font-bold uppercase tracking-wide px-2.5 py-1 rounded`}>
       {category}
@@ -19,17 +19,17 @@ function CategoryBadge({ category }: { category: string }) {
 function ArticleCard({ article }: { article: Article }) {
   return (
     <Link href={`/article/${article.slug}`} className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition group flex flex-col">
-      <div className="relative h-44 bg-coast-navy overflow-hidden">
+      <div className="relative h-44 bg-newsbooth-navy overflow-hidden">
         {article.image_url ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={article.image_url} alt={article.title} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-white/20 text-5xl font-extrabold">C</div>
+          <div className="w-full h-full flex items-center justify-center text-white/20 text-5xl font-extrabold">NB</div>
         )}
         <div className="absolute top-3 left-3"><CategoryBadge category={article.category} /></div>
       </div>
       <div className="p-4 flex flex-col flex-1">
-        <h3 className="font-bold text-coast-navy leading-snug mb-2 line-clamp-2 group-hover:text-coast-blue transition">
+        <h3 className="font-bold text-newsbooth-navy leading-snug mb-2 line-clamp-2 group-hover:text-newsbooth-blue transition">
           {article.title}
         </h3>
         <p className="text-sm text-gray-500 line-clamp-2 mb-3">{article.excerpt}</p>
@@ -54,7 +54,7 @@ export default async function HomePage() {
   return (
     <div>
       {/* Hero section */}
-      <section className="bg-coast-navy pb-10">
+      <section className="bg-newsbooth-navy pb-10">
         <div className="max-w-7xl mx-auto px-4 pt-6 grid lg:grid-cols-3 gap-6">
           {/* Top story */}
           <div className="lg:col-span-2">
@@ -64,11 +64,11 @@ export default async function HomePage() {
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={hero.image_url} alt={hero.title} className="w-full h-full object-cover group-hover:scale-105 transition duration-700" />
                 ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-coast-navy-light to-coast-navy" />
+                  <div className="w-full h-full bg-gradient-to-br from-newsbooth-navy-light to-newsbooth-navy" />
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
                 <div className="absolute bottom-0 p-6 md:p-8">
-                  <span className="bg-coast-red text-white text-xs font-bold px-3 py-1 rounded">TOP STORY</span>
+                  <span className="bg-newsbooth-red text-white text-xs font-bold px-3 py-1 rounded">TOP STORY</span>
                   <h1 className="text-white text-2xl md:text-4xl font-extrabold leading-tight mt-4 max-w-2xl">
                     {hero.title}
                   </h1>
@@ -79,10 +79,10 @@ export default async function HomePage() {
                 </div>
               </Link>
             ) : (
-              <div className="rounded-2xl bg-coast-navy-light h-[380px] flex flex-col items-center justify-center text-center p-8">
-                <p className="text-coast-gold font-extrabold text-3xl mb-2">The Coast Media Group</p>
+              <div className="rounded-2xl bg-newsbooth-navy-light h-[380px] flex flex-col items-center justify-center text-center p-8">
+                <p className="text-newsbooth-accent font-extrabold text-3xl mb-2">The News Booth</p>
                 <p className="text-white/70 max-w-md">
-                  Kenya&apos;s leading coastal news, radio and TV platform. Stories published in the admin panel will appear here.
+                  Kenya&apos;s leading news, radio and TV platform. Stories published in the admin panel will appear here.
                 </p>
               </div>
             )}
@@ -91,19 +91,19 @@ export default async function HomePage() {
           {/* Sidebar widgets */}
           <div className="space-y-6">
             {/* Radio widget */}
-            <div className="bg-coast-navy-light rounded-2xl p-6 text-center">
+            <div className="bg-newsbooth-navy-light rounded-2xl p-6 text-center">
               <div className="flex items-center justify-center gap-2 mb-1">
-                <span className="w-2 h-2 rounded-full bg-coast-red animate-pulse" />
-                <span className="text-white font-bold">Radio Coast</span>
+                <span className="w-2 h-2 rounded-full bg-newsbooth-red animate-pulse" />
+                <span className="text-white font-bold">Live Radio</span>
               </div>
-              <p className="text-coast-gold text-xs mb-4">Live — 98.7 FM Mombasa</p>
+              <p className="text-newsbooth-accent text-xs mb-4">Live — 98.7 FM Nairobi</p>
               <div className="flex items-end justify-center gap-[3px] h-6 mb-4">
                 <span className="eq-bar" /><span className="eq-bar" /><span className="eq-bar" />
                 <span className="eq-bar" /><span className="eq-bar" /><span className="eq-bar" /><span className="eq-bar" />
               </div>
               <Link
                 href="/listen"
-                className="inline-flex items-center gap-2 bg-coast-red text-white font-bold px-6 py-2.5 rounded-full hover:brightness-110 transition"
+                className="inline-flex items-center gap-2 bg-newsbooth-red text-white font-bold px-6 py-2.5 rounded-full hover:brightness-110 transition"
               >
                 <PlayCircle size={18} /> Listen Live
               </Link>
@@ -112,15 +112,15 @@ export default async function HomePage() {
             {/* Weather */}
             <div className="bg-white rounded-2xl p-5 shadow-sm">
               <p className="flex items-center gap-2 text-xs font-bold text-gray-400 tracking-widest mb-3">
-                <CloudSun size={14} /> COASTAL WEATHER
+                <CloudSun size={14} /> WEATHER
               </p>
               {[
-                { city: 'Mombasa', temp: '31°C', cond: 'Sunny' },
-                { city: 'Kilifi', temp: '29°C', cond: 'Partly Cloudy' },
-                { city: 'Nairobi', temp: '22°C', cond: 'Light Rain' },
+                { city: 'Nairobi', temp: '31°C', cond: 'Sunny' },
+                { city: 'Kisumu', temp: '29°C', cond: 'Partly Cloudy' },
+                { city: 'Kisumu', temp: '28°C', cond: 'Partly Cloudy' },
               ].map((w) => (
                 <div key={w.city} className="flex items-center justify-between py-2 border-b last:border-0 border-gray-100 text-sm">
-                  <span className="font-semibold text-coast-navy">{w.city}</span>
+                  <span className="font-semibold text-newsbooth-navy">{w.city}</span>
                   <span className="text-gray-500">{w.temp} · {w.cond}</span>
                 </div>
               ))}
@@ -134,9 +134,9 @@ export default async function HomePage() {
                 </p>
                 {trending.map((a, i) => (
                   <Link key={a.id} href={`/article/${a.slug}`} className="flex gap-3 py-2.5 border-b last:border-0 border-gray-100 group">
-                    <span className="text-coast-red font-extrabold text-lg leading-none">{i + 1}</span>
+                    <span className="text-newsbooth-red font-extrabold text-lg leading-none">{i + 1}</span>
                     <span>
-                      <span className="block text-sm font-semibold text-coast-navy group-hover:text-coast-blue line-clamp-2">{a.title}</span>
+                      <span className="block text-sm font-semibold text-newsbooth-navy group-hover:text-newsbooth-blue line-clamp-2">{a.title}</span>
                       <span className="text-xs text-gray-400">{timeAgo(a.created_at)}</span>
                     </span>
                   </Link>
@@ -156,8 +156,8 @@ export default async function HomePage() {
       {/* Latest news */}
       <section className="max-w-7xl mx-auto px-4 mt-10">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-extrabold text-coast-navy border-l-4 border-coast-red pl-3">Latest News</h2>
-          <Link href="/news" className="text-coast-blue font-semibold text-sm flex items-center gap-1 hover:gap-2 transition-all">
+          <h2 className="text-2xl font-extrabold text-newsbooth-navy border-l-4 border-newsbooth-red pl-3">Latest News</h2>
+          <Link href="/news" className="text-newsbooth-blue font-semibold text-sm flex items-center gap-1 hover:gap-2 transition-all">
             View All <ArrowRight size={15} />
           </Link>
         </div>
@@ -175,16 +175,16 @@ export default async function HomePage() {
       {/* Quick links */}
       <section className="max-w-7xl mx-auto px-4 mt-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {[
-          { href: '/listen', icon: Radio, title: 'Radio Coast', desc: 'Stream live radio 24/7', color: 'bg-coast-red' },
-          { href: '/tv', icon: Tv, title: 'TV Coast', desc: 'Watch our video content', color: 'bg-coast-blue' },
+          { href: '/listen', icon: Radio, title: 'Live Radio', desc: 'Stream live radio 24/7', color: 'bg-newsbooth-red' },
+          { href: '/tv', icon: Tv, title: 'TV Live', desc: 'Watch our video content', color: 'bg-newsbooth-blue' },
           { href: '/report', icon: PenSquare, title: 'Submit a Story', desc: 'Tip off our news desk', color: 'bg-emerald-600' },
-          { href: '/advertise', icon: Megaphone, title: 'Advertise', desc: 'Reach coastal audiences', color: 'bg-coast-gold' },
+          { href: '/advertise', icon: Megaphone, title: 'Advertise', desc: 'Reach our audiences', color: 'bg-newsbooth-accent' },
         ].map(({ href, icon: Icon, title, desc, color }) => (
           <Link key={href} href={href} className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition group">
             <span className={`${color} w-12 h-12 rounded-xl flex items-center justify-center text-white mb-4 group-hover:scale-110 transition`}>
               <Icon size={22} />
             </span>
-            <h3 className="font-bold text-coast-navy mb-1">{title}</h3>
+            <h3 className="font-bold text-newsbooth-navy mb-1">{title}</h3>
             <p className="text-sm text-gray-500">{desc}</p>
           </Link>
         ))}
@@ -192,7 +192,7 @@ export default async function HomePage() {
 
       {/* WhatsApp CTA */}
       <section className="max-w-7xl mx-auto px-4 mt-12">
-        <div className="bg-gradient-to-r from-coast-navy to-coast-navy-light rounded-2xl p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="bg-gradient-to-r from-newsbooth-navy to-newsbooth-navy-light rounded-2xl p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-6">
           <div>
             <h3 className="text-white font-extrabold text-2xl mb-2">Talk to our news desk</h3>
             <p className="text-white/70">Have a story tip, advert enquiry or feedback? Reach us instantly on WhatsApp.</p>
