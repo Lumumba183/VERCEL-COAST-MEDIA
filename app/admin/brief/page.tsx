@@ -100,11 +100,11 @@ export default function BriefPage() {
   return (
     <div>
       <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
-        <h2 className="font-extrabold text-coast-navy text-xl">Breaking News Ticker ({items.length})</h2>
+        <h2 className="font-extrabold text-newsbooth-navy text-xl">Breaking News Ticker ({items.length})</h2>
         <button
           onClick={autofill}
           disabled={saving}
-          className="bg-coast-navy text-white font-bold px-4 py-2.5 rounded-lg flex items-center gap-2 text-sm hover:brightness-125 disabled:opacity-60"
+          className="bg-newsbooth-navy text-white font-bold px-4 py-2.5 rounded-lg flex items-center gap-2 text-sm hover:brightness-125 disabled:opacity-60"
         >
           <Sparkles size={15} /> Auto-fill 5 Latest Articles
         </button>
@@ -113,8 +113,8 @@ export default function BriefPage() {
       <div className="grid lg:grid-cols-2 gap-5 mb-6">
         {/* Option 1: pick from existing articles */}
         <div className="bg-white rounded-2xl shadow-sm p-5">
-          <p className="font-bold text-coast-navy text-sm mb-3 flex items-center gap-2">
-            <Newspaper size={16} className="text-coast-blue" /> Pick from existing articles
+          <p className="font-bold text-newsbooth-navy text-sm mb-3 flex items-center gap-2">
+            <Newspaper size={16} className="text-newsbooth-blue" /> Pick from existing articles
           </p>
           <select
             defaultValue=""
@@ -134,8 +134,8 @@ export default function BriefPage() {
 
         {/* Option 2: write manually */}
         <form onSubmit={addManual} className="bg-white rounded-2xl shadow-sm p-5">
-          <p className="font-bold text-coast-navy text-sm mb-3 flex items-center gap-2">
-            <Plus size={16} className="text-coast-red" /> Or write a ticker item manually
+          <p className="font-bold text-newsbooth-navy text-sm mb-3 flex items-center gap-2">
+            <Plus size={16} className="text-newsbooth-red" /> Or write a ticker item manually
           </p>
           <div className="flex gap-3">
             <input
@@ -144,7 +144,7 @@ export default function BriefPage() {
               placeholder="e.g. Mombasa Port records highest cargo traffic…"
               className="flex-1 border border-gray-200 rounded-lg px-4 py-2.5 text-sm"
             />
-            <button disabled={saving || !text.trim()} className="bg-coast-red text-white font-bold px-5 py-2.5 rounded-lg text-sm disabled:opacity-60 shrink-0">
+            <button disabled={saving || !text.trim()} className="bg-newsbooth-red text-white font-bold px-5 py-2.5 rounded-lg text-sm disabled:opacity-60 shrink-0">
               Add
             </button>
           </div>
@@ -161,16 +161,16 @@ export default function BriefPage() {
           {items.map((item, i) => (
             <div key={item.id} className={`px-5 py-3.5 flex items-center gap-3 ${item.active ? '' : 'opacity-50'}`}>
               <span className="text-xs font-bold text-gray-300 w-6">{i + 1}</span>
-              <p className="flex-1 text-sm text-coast-navy min-w-0 truncate">
+              <p className="flex-1 text-sm text-newsbooth-navy min-w-0 truncate">
                 {item.text}
-                {item.article_id && <span className="ml-2 text-[10px] text-coast-blue font-bold">LINKED</span>}
+                {item.article_id && <span className="ml-2 text-[10px] text-newsbooth-blue font-bold">LINKED</span>}
               </p>
               <button onClick={() => move(i, -1)} disabled={i === 0} className="p-1.5 text-gray-400 hover:text-gray-600 disabled:opacity-30"><ArrowUp size={15} /></button>
               <button onClick={() => move(i, 1)} disabled={i === items.length - 1} className="p-1.5 text-gray-400 hover:text-gray-600 disabled:opacity-30"><ArrowDown size={15} /></button>
               <button onClick={() => toggle(item)} className="p-1.5 text-gray-400 hover:text-gray-600" title={item.active ? 'Hide' : 'Show'}>
                 {item.active ? <Eye size={15} /> : <EyeOff size={15} />}
               </button>
-              <button onClick={() => remove(item.id)} className="p-1.5 text-coast-red hover:bg-red-50 rounded-lg"><Trash2 size={15} /></button>
+              <button onClick={() => remove(item.id)} className="p-1.5 text-newsbooth-red hover:bg-red-50 rounded-lg"><Trash2 size={15} /></button>
             </div>
           ))}
         </div>
