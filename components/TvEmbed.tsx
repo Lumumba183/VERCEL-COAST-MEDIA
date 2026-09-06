@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { MonitorPlay, PlayCircle, Loader2 } from 'lucide-react';
 
 /**
- * TV Coast embed — supports YouTube or Twitch, chosen in Admin → Settings.
+ * TV Live embed — supports YouTube or Twitch, chosen in Admin → Settings.
  * Accepts a plain channel id/name OR a full channel URL in either field.
  */
 export default function TvEmbed() {
@@ -20,7 +20,7 @@ export default function TvEmbed() {
   if (settings === null) {
     return (
       <div className="bg-white rounded-2xl shadow-sm p-12 text-center text-gray-400">
-        <Loader2 className="animate-spin inline mr-2" /> Loading TV Coast…
+        <Loader2 className="animate-spin inline mr-2" /> Loading TV Live…
       </div>
     );
   }
@@ -45,13 +45,13 @@ export default function TvEmbed() {
             src={`https://player.twitch.tv/?channel=${encodeURIComponent(twChannel)}&parent=${parent}&autoplay=false`}
             className="w-full h-full"
             allowFullScreen
-            title="TV Coast — Twitch Live"
+            title="TV Live — Twitch Live"
           />
         </div>
         <div className="p-5 flex items-center justify-between">
           <div>
-            <h2 className="font-bold text-coast-navy">TV Coast Live — Twitch</h2>
-            <p className="text-sm text-gray-500">Broadcasting from Mombasa, Kenya</p>
+            <h2 className="font-bold text-newsbooth-navy">TV Live Live — Twitch</h2>
+            <p className="text-sm text-gray-500">Broadcasting live</p>
           </div>
           <a
             href={`https://www.twitch.tv/${twChannel}`}
@@ -75,19 +75,19 @@ export default function TvEmbed() {
             className="w-full h-full"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
-            title="TV Coast — YouTube Live"
+            title="TV Live — YouTube Live"
           />
         </div>
         <div className="p-5 flex items-center justify-between">
           <div>
-            <h2 className="font-bold text-coast-navy">TV Coast Live — YouTube</h2>
-            <p className="text-sm text-gray-500">Broadcasting from Mombasa, Kenya</p>
+            <h2 className="font-bold text-newsbooth-navy">TV Live Live — YouTube</h2>
+            <p className="text-sm text-gray-500">Broadcasting live</p>
           </div>
           <a
             href={ytRaw.startsWith('UC') ? `https://www.youtube.com/channel/${ytRaw}` : `https://www.youtube.com/@${ytChannel}`}
             target="_blank"
             rel="noreferrer"
-            className="flex items-center gap-2 bg-coast-red text-white font-bold px-5 py-2.5 rounded-lg hover:brightness-110 transition text-sm"
+            className="flex items-center gap-2 bg-newsbooth-red text-white font-bold px-5 py-2.5 rounded-lg hover:brightness-110 transition text-sm"
           >
             <PlayCircle size={16} /> Subscribe
           </a>
@@ -99,9 +99,9 @@ export default function TvEmbed() {
   return (
     <div className="bg-white rounded-2xl shadow-sm p-12 text-center">
       <MonitorPlay size={48} className="mx-auto text-gray-300 mb-4" />
-      <h2 className="font-bold text-coast-navy text-lg mb-2">Channel not configured yet</h2>
+      <h2 className="font-bold text-newsbooth-navy text-lg mb-2">Stream not configured yet</h2>
       <p className="text-gray-500 max-w-md mx-auto">
-        Staff can choose YouTube or Twitch and paste the channel link in <strong>Admin → Settings</strong> to embed the TV Coast live stream here.
+        Staff can choose YouTube or Twitch and paste the channel link in <strong>Admin → Settings</strong> to embed the TV Live live stream here.
       </p>
     </div>
   );
