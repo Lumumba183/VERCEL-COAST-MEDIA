@@ -46,7 +46,7 @@ export default function AdminPage() {
             key={id}
             onClick={() => setTab(id)}
             className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold transition whitespace-nowrap ${
-              tab === id ? 'bg-coast-navy text-white' : 'text-gray-500 hover:bg-gray-100'
+              tab === id ? 'bg-newsbooth-navy text-white' : 'text-gray-500 hover:bg-gray-100'
             }`}
           >
             <Icon size={16} /> {label}
@@ -56,24 +56,24 @@ export default function AdminPage() {
 
       {tab === 'dashboard' && (
         <div>
-          <h2 className="font-extrabold text-coast-navy text-xl mb-5">Overview</h2>
+          <h2 className="font-extrabold text-newsbooth-navy text-xl mb-5">Overview</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
             {[
-              { label: 'Total Articles', value: stats.articles, color: 'bg-coast-blue', action: () => setTab('articles') },
+              { label: 'Total Articles', value: stats.articles, color: 'bg-newsbooth-blue', action: () => setTab('articles') },
               { label: 'Published', value: stats.published, color: 'bg-emerald-600', action: () => setTab('articles') },
-              { label: 'Programme Slots', value: stats.schedule, color: 'bg-coast-gold', action: () => setTab('schedule') },
-              { label: 'New Reports', value: stats.newReports, color: 'bg-coast-red', action: () => setTab('reports') },
+              { label: 'Programme Slots', value: stats.schedule, color: 'bg-newsbooth-accent', action: () => setTab('schedule') },
+              { label: 'New Reports', value: stats.newReports, color: 'bg-newsbooth-red', action: () => setTab('reports') },
             ].map((s) => (
               <button key={s.label} onClick={s.action} className="bg-white rounded-2xl shadow-sm p-6 text-left hover:shadow-lg transition">
                 <span className={`${s.color} w-2 h-10 rounded-full inline-block mb-3`} />
-                <p className="text-3xl font-extrabold text-coast-navy">{s.value}</p>
+                <p className="text-3xl font-extrabold text-newsbooth-navy">{s.value}</p>
                 <p className="text-sm text-gray-500">{s.label}</p>
               </button>
             ))}
           </div>
           <AnalyticsPanel />
           <div className="bg-white rounded-2xl shadow-sm p-6">
-            <h3 className="font-bold text-coast-navy mb-3">Quick guide</h3>
+            <h3 className="font-bold text-newsbooth-navy mb-3">Quick guide</h3>
             <ul className="text-sm text-gray-500 space-y-2">
               <li>• <strong>Articles</strong> — publish news; mark one as Featured to make it the homepage hero.</li>
               <li>• <strong>Schedule</strong> — manage the weekly radio line-up shown on /schedule.</li>
