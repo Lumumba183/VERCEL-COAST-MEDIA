@@ -34,18 +34,18 @@ export function stripHtml(html: string): string {
   return html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
-export const WHATSAPP_URL = 'https://wa.me/254720870176';
-export const CONTACT_PHONE = '+254 720 870 176';
-export const CONTACT_EMAIL = 'thecoastnewspaper@gmail.com';
+export const WHATSAPP_URL = 'https://wa.me/254750777777';
+export const CONTACT_PHONE = '+254 750 777 777';
+export const CONTACT_EMAIL = 'info.newsbooth@gmail.com';
 
 export const SOCIAL_LINKS = {
-  tiktok: 'https://www.tiktok.com/@the.coast.media.g',
-  facebook: 'https://www.facebook.com/share/1AmCXAK9fa/',
+  tiktok: 'https://www.tiktok.com/@thenewsbooth',
+  facebook: 'https://www.facebook.com/thenewsbooth/',
 };
 
 export const CATEGORY_COLORS: Record<string, string> = {
-  'National News': 'bg-coast-red',
-  'County News': 'bg-coast-blue',
+  'National News': 'bg-newsbooth-red',
+  'County News': 'bg-newsbooth-blue',
   'World News': 'bg-purple-600',
   Politics: 'bg-emerald-700',
   Sports: 'bg-teal-600',
