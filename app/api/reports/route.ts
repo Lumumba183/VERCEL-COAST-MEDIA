@@ -41,6 +41,30 @@ export async function POST(req: NextRequest) {
     .select('id')
     .single();
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  // Send email notification
+  try {
+    const { Resend } = await import('resend');
+    const resend = new Resend(process.env.RESEND_API_KEY);
+    await resend.emails.send({
+      from: 'The News Booth <onboarding@resend.dev>',
+      to: 'info.newsbooth@gmail.com',
+      subject: `New Submission: ${body.subject}`,
+      html: `
+        <h2>New submission from The News Booth website</h2>
+        <p><strong>Name:</strong> ${body.name}</p>
+        <p><strong>Email:</strong> ${body.email}</p>
+        <p><strong>Phone:</strong> ${body.phone || 'N/A'}</p>
+        <p><strong>Subject:</strong> ${body.subject}</p>
+        <p><strong>Location:</strong> ${body.location || 'N/A'}</p>
+        <p><strong>Message:</strong></p>
+        <p>${body.message.replace(/\n/g, '<br>')}</p>
+      `,
+    });
+  } catch (e) {
+    console.error('Email send failed:', e);
+  }
+
   return NextResponse.json({ ok: true, id: data.id }, { status: 201 });
 }
 
