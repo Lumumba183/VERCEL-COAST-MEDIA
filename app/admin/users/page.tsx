@@ -86,8 +86,8 @@ export default function UsersPage() {
   if (forbidden) {
     return (
       <div className="bg-white rounded-2xl p-10 text-center">
-        <ShieldCheck size={40} className="mx-auto text-coast-red mb-3" />
-        <p className="font-bold text-coast-navy">Admins only</p>
+        <ShieldCheck size={40} className="mx-auto text-newsbooth-red mb-3" />
+        <p className="font-bold text-newsbooth-navy">Admins only</p>
         <p className="text-sm text-gray-500 mt-1">User management requires the admin role.</p>
       </div>
     );
@@ -96,8 +96,8 @@ export default function UsersPage() {
   return (
     <div>
       <div className="flex items-center justify-between mb-5">
-        <h2 className="font-extrabold text-coast-navy text-xl">Staff Users ({users.length})</h2>
-        <button onClick={() => { setShowForm(true); setError(''); setCreated(null); }} className="bg-coast-red text-white font-bold px-4 py-2.5 rounded-lg flex items-center gap-2 text-sm hover:brightness-110">
+        <h2 className="font-extrabold text-newsbooth-navy text-xl">Staff Users ({users.length})</h2>
+        <button onClick={() => { setShowForm(true); setError(''); setCreated(null); }} className="bg-newsbooth-red text-white font-bold px-4 py-2.5 rounded-lg flex items-center gap-2 text-sm hover:brightness-110">
           <Plus size={16} /> Add Staff
         </button>
       </div>
@@ -114,7 +114,7 @@ export default function UsersPage() {
             <span className="flex-1">{created.temp_password}</span>
             <button
               onClick={() => { navigator.clipboard.writeText(created.temp_password); setCopied(true); setTimeout(() => setCopied(false), 2000); }}
-              className="text-coast-blue flex items-center gap-1 text-xs font-bold"
+              className="text-newsbooth-blue flex items-center gap-1 text-xs font-bold"
             >
               <Copy size={14} /> {copied ? 'Copied!' : 'Copy'}
             </button>
@@ -123,9 +123,9 @@ export default function UsersPage() {
       )}
 
       {showForm && (
-        <form onSubmit={save} className="bg-white rounded-2xl shadow-sm p-6 mb-6 space-y-5 border-2 border-coast-blue/20">
+        <form onSubmit={save} className="bg-white rounded-2xl shadow-sm p-6 mb-6 space-y-5 border-2 border-newsbooth-blue/20">
           <div className="flex items-center justify-between">
-            <h3 className="font-bold text-coast-navy">New Staff Member</h3>
+            <h3 className="font-bold text-newsbooth-navy">New Staff Member</h3>
             <button type="button" onClick={() => setShowForm(false)} className="text-gray-400 hover:text-gray-600"><X size={20} /></button>
           </div>
           <p className="text-xs text-gray-400">
@@ -137,13 +137,13 @@ export default function UsersPage() {
           </div>
 
           <div>
-            <p className="text-sm font-bold text-coast-navy mb-2">Role — tick one</p>
+            <p className="text-sm font-bold text-newsbooth-navy mb-2">Role — tick one</p>
             <div className="grid sm:grid-cols-3 gap-3">
               {ROLES.map((r) => (
                 <label
                   key={r.id}
                   className={`flex items-start gap-3 border-2 rounded-xl p-3.5 cursor-pointer transition ${
-                    form.role === r.id ? 'border-coast-blue bg-blue-50/50' : 'border-gray-200 hover:border-gray-300'
+                    form.role === r.id ? 'border-newsbooth-blue bg-blue-50/50' : 'border-gray-200 hover:border-gray-300'
                   }`}
                 >
                   <input
@@ -154,7 +154,7 @@ export default function UsersPage() {
                     className="mt-1"
                   />
                   <span>
-                    <span className="block font-bold text-coast-navy text-sm">{r.label}</span>
+                    <span className="block font-bold text-newsbooth-navy text-sm">{r.label}</span>
                     <span className="block text-xs text-gray-400">{r.desc}</span>
                   </span>
                 </label>
@@ -164,13 +164,13 @@ export default function UsersPage() {
 
           {form.role !== 'admin' && (
             <div>
-              <p className="text-sm font-bold text-coast-navy mb-2">Allowed areas — tick each area this person can manage</p>
+              <p className="text-sm font-bold text-newsbooth-navy mb-2">Allowed areas — tick each area this person can manage</p>
               <div className="flex flex-wrap gap-3">
                 {ADMIN_AREAS.filter((a) => a !== 'all').map((area) => (
                   <label
                     key={area}
                     className={`flex items-center gap-2 border-2 rounded-xl px-4 py-2.5 cursor-pointer text-sm font-semibold capitalize transition ${
-                      form.allowed_areas.includes(area) ? 'border-coast-blue bg-blue-50/50 text-coast-navy' : 'border-gray-200 text-gray-500 hover:border-gray-300'
+                      form.allowed_areas.includes(area) ? 'border-newsbooth-blue bg-blue-50/50 text-newsbooth-navy' : 'border-gray-200 text-gray-500 hover:border-gray-300'
                     }`}
                   >
                     <input
@@ -193,8 +193,8 @@ export default function UsersPage() {
           )}
 
           <div className="flex items-center gap-4">
-            {error && <span className="text-sm text-coast-red">{error}</span>}
-            <button disabled={saving} className="ml-auto bg-coast-navy text-white font-bold px-6 py-2.5 rounded-lg disabled:opacity-60 flex items-center gap-2">
+            {error && <span className="text-sm text-newsbooth-red">{error}</span>}
+            <button disabled={saving} className="ml-auto bg-newsbooth-navy text-white font-bold px-6 py-2.5 rounded-lg disabled:opacity-60 flex items-center gap-2">
               {saving && <Loader2 size={15} className="animate-spin" />} Create Account
             </button>
           </div>
@@ -218,7 +218,7 @@ export default function UsersPage() {
               {users.map((u) => (
                 <tr key={u.id} className="border-b border-gray-50 hover:bg-gray-50/50 align-top">
                   <td className="px-5 py-4">
-                    <p className="font-semibold text-coast-navy">{u.full_name || '—'}</p>
+                    <p className="font-semibold text-newsbooth-navy">{u.full_name || '—'}</p>
                     <p className="text-xs text-gray-400">{u.email}</p>
                   </td>
                   <td className="px-5 py-4">
@@ -255,7 +255,7 @@ export default function UsersPage() {
                     )}
                   </td>
                   <td className="px-5 py-4 text-right">
-                    <button onClick={() => remove(u)} className="p-2 text-coast-red hover:bg-red-50 rounded-lg"><Trash2 size={15} /></button>
+                    <button onClick={() => remove(u)} className="p-2 text-newsbooth-red hover:bg-red-50 rounded-lg"><Trash2 size={15} /></button>
                   </td>
                 </tr>
               ))}
