@@ -161,8 +161,8 @@ export default function AdminAdsPage() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="font-extrabold text-coast-navy text-xl flex items-center gap-2">
-            <Megaphone size={20} className="text-coast-red" /> Adverts
+          <h2 className="font-extrabold text-newsbooth-navy text-xl flex items-center gap-2">
+            <Megaphone size={20} className="text-newsbooth-red" /> Adverts
           </h2>
           <p className="text-sm text-gray-500 mt-1">
             {liveCount} live · {ads.length} total. Adverts automatically stop showing the day after their end date.
@@ -170,7 +170,7 @@ export default function AdminAdsPage() {
         </div>
         <button
           onClick={() => setShowForm((s) => !s)}
-          className="flex items-center gap-2 bg-coast-red text-white font-bold text-sm px-5 py-2.5 rounded-xl hover:brightness-110 transition"
+          className="flex items-center gap-2 bg-newsbooth-red text-white font-bold text-sm px-5 py-2.5 rounded-xl hover:brightness-110 transition"
         >
           {showForm ? <X size={16} /> : <Plus size={16} />} {showForm ? 'Close' : 'New Advert'}
         </button>
@@ -182,17 +182,17 @@ export default function AdminAdsPage() {
       {/* Create form */}
       {showForm && (
         <form onSubmit={createAd} className="bg-white rounded-2xl shadow-sm p-6 mb-6">
-          <h3 className="font-bold text-coast-navy mb-5">New customer advert</h3>
+          <h3 className="font-bold text-newsbooth-navy mb-5">New customer advert</h3>
           <div className="grid md:grid-cols-2 gap-4">
             <label className="block">
               <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Advert title *</span>
               <input required value={title} onChange={(e) => setTitle(e.target.value)}
                 placeholder="e.g. Summer Sale — 50% Off"
-                className="mt-1 w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-coast-blue/40" />
+                className="mt-1 w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-newsbooth-blue/40" />
             </label>
             <label className="block">
               <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Client / company *</span>
-              <div className="mt-1 flex items-center gap-2 border border-gray-200 rounded-lg px-3 focus-within:ring-2 focus-within:ring-coast-blue/40">
+              <div className="mt-1 flex items-center gap-2 border border-gray-200 rounded-lg px-3 focus-within:ring-2 focus-within:ring-newsbooth-blue/40">
                 <Building2 size={15} className="text-gray-400 shrink-0" />
                 <input required value={clientName} onChange={(e) => setClientName(e.target.value)}
                   placeholder="e.g. Mombasa Beach Hotel"
@@ -203,11 +203,11 @@ export default function AdminAdsPage() {
               <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Client contact (email / phone)</span>
               <input value={clientContact} onChange={(e) => setClientContact(e.target.value)}
                 placeholder="For your records — not shown publicly"
-                className="mt-1 w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-coast-blue/40" />
+                className="mt-1 w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-newsbooth-blue/40" />
             </label>
             <label className="block">
               <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Click-through link</span>
-              <div className="mt-1 flex items-center gap-2 border border-gray-200 rounded-lg px-3 focus-within:ring-2 focus-within:ring-coast-blue/40">
+              <div className="mt-1 flex items-center gap-2 border border-gray-200 rounded-lg px-3 focus-within:ring-2 focus-within:ring-newsbooth-blue/40">
                 <Link2 size={15} className="text-gray-400 shrink-0" />
                 <input value={linkUrl} onChange={(e) => setLinkUrl(e.target.value)} type="url"
                   placeholder="https://… where visitors go when they click"
@@ -220,8 +220,8 @@ export default function AdminAdsPage() {
               <div className="grid sm:grid-cols-3 gap-3 mt-2">
                 {PLACEMENTS.map((p) => (
                   <button type="button" key={p.id} onClick={() => setPlacement(p.id)}
-                    className={`text-left rounded-xl border-2 p-3 transition ${placement === p.id ? 'border-coast-blue bg-coast-blue/5' : 'border-gray-100 hover:border-gray-200'}`}>
-                    <p className="font-bold text-sm text-coast-navy">{p.label}</p>
+                    className={`text-left rounded-xl border-2 p-3 transition ${placement === p.id ? 'border-newsbooth-blue bg-newsbooth-blue/5' : 'border-gray-100 hover:border-gray-200'}`}>
+                    <p className="font-bold text-sm text-newsbooth-navy">{p.label}</p>
                     <p className="text-xs text-gray-400 mt-0.5">{p.hint}</p>
                   </button>
                 ))}
@@ -241,13 +241,13 @@ export default function AdminAdsPage() {
               <div className="flex items-center gap-2 mt-2 flex-wrap">
                 {DAY_PRESETS.map((d) => (
                   <button type="button" key={d} onClick={() => setDays(d)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${days === d ? 'bg-coast-navy text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${days === d ? 'bg-newsbooth-navy text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
                     {d}d
                   </button>
                 ))}
                 <input type="number" min={1} max={365} value={days} onChange={(e) => setDays(Math.min(Math.max(parseInt(e.target.value, 10) || 1, 1), 365))}
-                  className="w-20 border border-gray-200 rounded-lg px-2 py-1.5 text-xs text-center focus:outline-none focus:ring-2 focus:ring-coast-blue/40" />
-                <span className="text-xs text-gray-400">days → ends <strong className="text-coast-navy">{endDate}</strong></span>
+                  className="w-20 border border-gray-200 rounded-lg px-2 py-1.5 text-xs text-center focus:outline-none focus:ring-2 focus:ring-newsbooth-blue/40" />
+                <span className="text-xs text-gray-400">days → ends <strong className="text-newsbooth-navy">{endDate}</strong></span>
               </div>
             </div>
 
@@ -259,13 +259,13 @@ export default function AdminAdsPage() {
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={imageUrl} alt="Advert preview" className="max-h-44 rounded-xl border border-gray-200" />
                   <button type="button" onClick={() => setImageUrl('')}
-                    className="absolute -top-2 -right-2 bg-coast-red text-white rounded-full p-1 shadow hover:brightness-110">
+                    className="absolute -top-2 -right-2 bg-newsbooth-red text-white rounded-full p-1 shadow hover:brightness-110">
                     <X size={14} />
                   </button>
                 </div>
               ) : (
                 <div className="mt-2 flex flex-wrap items-center gap-3">
-                  <label className={`flex items-center gap-2 cursor-pointer bg-coast-navy text-white text-sm font-bold px-4 py-2.5 rounded-xl hover:brightness-110 transition ${uploading ? 'opacity-60 pointer-events-none' : ''}`}>
+                  <label className={`flex items-center gap-2 cursor-pointer bg-newsbooth-navy text-white text-sm font-bold px-4 py-2.5 rounded-xl hover:brightness-110 transition ${uploading ? 'opacity-60 pointer-events-none' : ''}`}>
                     {uploading ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
                     {uploading ? 'Uploading…' : 'Upload image'}
                     <input type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && uploadImage(e.target.files[0])} />
@@ -283,7 +283,7 @@ export default function AdminAdsPage() {
           </div>
 
           <button disabled={saving || uploading || !imageUrl}
-            className="mt-6 flex items-center gap-2 bg-coast-red text-white font-bold px-6 py-3 rounded-xl hover:brightness-110 transition disabled:opacity-50">
+            className="mt-6 flex items-center gap-2 bg-newsbooth-red text-white font-bold px-6 py-3 rounded-xl hover:brightness-110 transition disabled:opacity-50">
             {saving ? <Loader2 size={16} className="animate-spin" /> : <Plus size={16} />}
             {saving ? 'Saving…' : 'Publish Advert'}
           </button>
@@ -298,7 +298,7 @@ export default function AdminAdsPage() {
       ) : ads.length === 0 ? (
         <div className="bg-white rounded-2xl shadow-sm p-10 text-center">
           <Megaphone size={40} className="mx-auto text-gray-200 mb-3" />
-          <p className="font-bold text-coast-navy">No adverts yet</p>
+          <p className="font-bold text-newsbooth-navy">No adverts yet</p>
           <p className="text-sm text-gray-400 mt-1">Click “New Advert” to add your first customer advert.</p>
         </div>
       ) : (
@@ -313,7 +313,7 @@ export default function AdminAdsPage() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <p className="font-extrabold text-coast-navy leading-snug">{ad.title}</p>
+                      <p className="font-extrabold text-newsbooth-navy leading-snug">{ad.title}</p>
                       <p className="text-xs text-gray-400 mt-0.5">
                         {ad.client_name}{ad.client_contact ? ` · ${ad.client_contact}` : ''} · {PLACEMENTS.find((p) => p.id === ad.placement)?.label}
                       </p>
@@ -324,8 +324,8 @@ export default function AdminAdsPage() {
                   </div>
                   <div className="flex items-center gap-4 text-xs text-gray-500 mt-2">
                     <span className="flex items-center gap-1"><CalendarDays size={12} /> {ad.start_date} → {ad.end_date}</span>
-                    <span className="flex items-center gap-1 font-semibold text-coast-navy"><Clock3 size={12} /> {daysLeft(ad)}</span>
-                    {ad.link_url && <a href={ad.link_url} target="_blank" rel="noreferrer" className="flex items-center gap-1 text-coast-blue hover:underline"><Link2 size={12} /> link</a>}
+                    <span className="flex items-center gap-1 font-semibold text-newsbooth-navy"><Clock3 size={12} /> {daysLeft(ad)}</span>
+                    {ad.link_url && <a href={ad.link_url} target="_blank" rel="noreferrer" className="flex items-center gap-1 text-newsbooth-blue hover:underline"><Link2 size={12} /> link</a>}
                   </div>
                   <div className="flex flex-wrap items-center gap-2 mt-3">
                     <button onClick={() => toggleActive(ad)}
