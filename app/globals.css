@@ -1,18 +1,18 @@
 @import "tailwindcss";
 
 @theme {
-  --color-coast-navy: #0a2540;
-  --color-coast-navy-light: #123a63;
-  --color-coast-blue: #1565c0;
-  --color-coast-red: #ef2d3f;
-  --color-coast-gold: #f5b301;
-  --color-coast-light: #f4f7fb;
+  --color-newsbooth-navy: #0a2540;
+  --color-newsbooth-navy-light: #123a63;
+  --color-newsbooth-blue: #1565c0;
+  --color-newsbooth-red: #ef2d3f;
+  --color-newsbooth-accent: #f5b301;
+  --color-newsbooth-light: #f4f7fb;
 }
 
 body {
   background: #f4f7fb;
   color: #1a202c;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
 /* Breaking-news ticker animation */
@@ -66,3 +66,13 @@ body {
 .article-body p { margin-bottom: 1rem; line-height: 1.8; color: #374151; }
 .article-body ul { list-style: disc; padding-left: 1.5rem; margin-bottom: 1rem; }
 .article-body a { color: #1565c0; text-decoration: underline; }
+
+
+/* Smooth scrolling */
+html { scroll-behavior: smooth; }
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { background: #0ea5e9; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #0284c7; }
