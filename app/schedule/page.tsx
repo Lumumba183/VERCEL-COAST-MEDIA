@@ -19,10 +19,10 @@ export default async function SchedulePage({
 
   return (
     <div className="max-w-4xl mx-auto px-4 mt-10">
-      <h1 className="text-3xl font-extrabold text-coast-navy border-l-4 border-coast-red pl-3 mb-2 flex items-center gap-3">
+      <h1 className="text-3xl font-extrabold text-newsbooth-navy border-l-4 border-newsbooth-red pl-3 mb-2 flex items-center gap-3">
         <CalendarDays size={28} /> Programme Schedule
       </h1>
-      <p className="text-gray-500 mb-8">Radio Coast weekly line-up — all times East Africa Time (EAT).</p>
+      <p className="text-gray-500 mb-8">Live Radio weekly line-up — all times East Africa Time (EAT).</p>
 
       <div className="flex flex-wrap gap-2 mb-8">
         {DAYS_OF_WEEK.map((d) => (
@@ -30,11 +30,11 @@ export default async function SchedulePage({
             key={d}
             href={`/schedule?day=${d}`}
             className={`px-4 py-2 rounded-full text-sm font-semibold transition ${
-              d === activeDay ? 'bg-coast-navy text-white' : 'bg-white text-coast-navy hover:bg-gray-100'
+              d === activeDay ? 'bg-newsbooth-navy text-white' : 'bg-white text-newsbooth-navy hover:bg-gray-100'
             }`}
           >
             {d}
-            {d === today && <span className="ml-1.5 text-[10px] text-coast-gold">●</span>}
+            {d === today && <span className="ml-1.5 text-[10px] text-newsbooth-accent">●</span>}
           </Link>
         ))}
       </div>
@@ -48,14 +48,14 @@ export default async function SchedulePage({
           {items.map((s) => (
             <div key={s.id} className="bg-white rounded-2xl shadow-sm p-6 flex flex-col sm:flex-row sm:items-center gap-4">
               <div className="sm:w-44 shrink-0">
-                <p className="flex items-center gap-2 text-coast-red font-bold">
+                <p className="flex items-center gap-2 text-newsbooth-red font-bold">
                   <Clock size={16} /> {s.start_time} – {s.end_time}
                 </p>
               </div>
               <div className="flex-1">
-                <h2 className="font-bold text-coast-navy text-lg">{s.show_name}</h2>
+                <h2 className="font-bold text-newsbooth-navy text-lg">{s.show_name}</h2>
                 {s.host && (
-                  <p className="text-sm text-coast-blue font-semibold flex items-center gap-1.5 mt-0.5">
+                  <p className="text-sm text-newsbooth-blue font-semibold flex items-center gap-1.5 mt-0.5">
                     <User size={14} /> {s.host}
                   </p>
                 )}
