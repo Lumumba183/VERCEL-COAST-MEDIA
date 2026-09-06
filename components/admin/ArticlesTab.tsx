@@ -119,16 +119,16 @@ export default function ArticlesTab() {
   return (
     <div>
       <div className="flex items-center justify-between mb-5">
-        <h2 className="font-extrabold text-coast-navy text-xl">Articles ({articles.length})</h2>
-        <button onClick={openNew} className="bg-coast-red text-white font-bold px-4 py-2.5 rounded-lg flex items-center gap-2 text-sm hover:brightness-110">
+        <h2 className="font-extrabold text-newsbooth-navy text-xl">Articles ({articles.length})</h2>
+        <button onClick={openNew} className="bg-newsbooth-red text-white font-bold px-4 py-2.5 rounded-lg flex items-center gap-2 text-sm hover:brightness-110">
           <Plus size={16} /> New Article
         </button>
       </div>
 
       {showForm && (
-        <form onSubmit={save} className="bg-white rounded-2xl shadow-sm p-6 mb-6 space-y-4 border-2 border-coast-blue/20">
+        <form onSubmit={save} className="bg-white rounded-2xl shadow-sm p-6 mb-6 space-y-4 border-2 border-newsbooth-blue/20">
           <div className="flex items-center justify-between">
-            <h3 className="font-bold text-coast-navy">{editing ? 'Edit Article' : 'New Article'}</h3>
+            <h3 className="font-bold text-newsbooth-navy">{editing ? 'Edit Article' : 'New Article'}</h3>
             <button type="button" onClick={() => setShowForm(false)} className="text-gray-400 hover:text-gray-600"><X size={20} /></button>
           </div>
           <input required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="Headline *" className="w-full border border-gray-200 rounded-lg px-4 py-2.5" />
@@ -141,7 +141,7 @@ export default function ArticlesTab() {
 
           {/* Article image — upload a file OR paste a URL */}
           <div className="border border-dashed border-gray-300 rounded-xl p-4">
-            <p className="text-sm font-bold text-coast-navy mb-3">Article image</p>
+            <p className="text-sm font-bold text-newsbooth-navy mb-3">Article image</p>
             <div className="flex flex-col sm:flex-row gap-4 sm:items-center">
               {form.image_url ? (
                 <div className="relative w-36 h-24 rounded-lg overflow-hidden bg-gray-100 shrink-0">
@@ -161,7 +161,7 @@ export default function ArticlesTab() {
                   type="button"
                   disabled={uploading}
                   onClick={() => fileRef.current?.click()}
-                  className="w-36 h-24 rounded-lg bg-coast-light flex flex-col items-center justify-center gap-1.5 text-coast-blue hover:bg-blue-50 transition shrink-0 disabled:opacity-60"
+                  className="w-36 h-24 rounded-lg bg-newsbooth-light flex flex-col items-center justify-center gap-1.5 text-newsbooth-blue hover:bg-blue-50 transition shrink-0 disabled:opacity-60"
                 >
                   {uploading ? <Loader2 size={20} className="animate-spin" /> : <UploadCloud size={20} />}
                   <span className="text-xs font-bold">{uploading ? 'Uploading…' : 'Upload image'}</span>
@@ -198,8 +198,8 @@ export default function ArticlesTab() {
             <label className="flex items-center gap-2 text-sm font-semibold text-gray-600">
               <input type="checkbox" checked={form.published} onChange={(e) => setForm({ ...form, published: e.target.checked })} /> Published
             </label>
-            {error && <span className="text-sm text-coast-red">{error}</span>}
-            <button disabled={saving} className="ml-auto bg-coast-navy text-white font-bold px-6 py-2.5 rounded-lg disabled:opacity-60 flex items-center gap-2">
+            {error && <span className="text-sm text-newsbooth-red">{error}</span>}
+            <button disabled={saving} className="ml-auto bg-newsbooth-navy text-white font-bold px-6 py-2.5 rounded-lg disabled:opacity-60 flex items-center gap-2">
               {saving && <Loader2 size={15} className="animate-spin" />} {editing ? 'Save Changes' : 'Publish Article'}
             </button>
           </div>
@@ -224,7 +224,7 @@ export default function ArticlesTab() {
               {articles.map((a) => (
                 <tr key={a.id} className="border-b border-gray-50 hover:bg-gray-50/50">
                   <td className="px-5 py-3">
-                    <p className="font-semibold text-coast-navy line-clamp-1 max-w-xs">{a.title}</p>
+                    <p className="font-semibold text-newsbooth-navy line-clamp-1 max-w-xs">{a.title}</p>
                     <p className="text-xs text-gray-400">{a.author}</p>
                   </td>
                   <td className="px-5 py-3 hidden md:table-cell text-gray-500">{a.category}</td>
@@ -236,14 +236,14 @@ export default function ArticlesTab() {
                   <td className="px-5 py-3 hidden lg:table-cell text-gray-400">{timeAgo(a.created_at)}</td>
                   <td className="px-5 py-3">
                     <div className="flex items-center justify-end gap-1">
-                      <button title="Featured" onClick={() => toggleFlag(a, 'featured')} className={`p-2 rounded-lg ${a.featured ? 'text-coast-gold' : 'text-gray-300 hover:text-gray-500'}`}>
+                      <button title="Featured" onClick={() => toggleFlag(a, 'featured')} className={`p-2 rounded-lg ${a.featured ? 'text-newsbooth-accent' : 'text-gray-300 hover:text-gray-500'}`}>
                         <Star size={16} fill={a.featured ? 'currentColor' : 'none'} />
                       </button>
                       <button title={a.published ? 'Unpublish' : 'Publish'} onClick={() => toggleFlag(a, 'published')} className="p-2 rounded-lg text-gray-400 hover:text-gray-600">
                         {a.published ? <Eye size={16} /> : <EyeOff size={16} />}
                       </button>
-                      <button title="Edit" onClick={() => openEdit(a)} className="p-2 rounded-lg text-coast-blue hover:bg-blue-50"><Pencil size={16} /></button>
-                      <button title="Delete" onClick={() => remove(a)} className="p-2 rounded-lg text-coast-red hover:bg-red-50"><Trash2 size={16} /></button>
+                      <button title="Edit" onClick={() => openEdit(a)} className="p-2 rounded-lg text-newsbooth-blue hover:bg-blue-50"><Pencil size={16} /></button>
+                      <button title="Delete" onClick={() => remove(a)} className="p-2 rounded-lg text-newsbooth-red hover:bg-red-50"><Trash2 size={16} /></button>
                     </div>
                   </td>
                 </tr>
