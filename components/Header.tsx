@@ -14,7 +14,7 @@ const NAV = [
   { href: '/news', label: 'News', icon: Newspaper },
   { href: '/schedule', label: 'Schedule', icon: CalendarDays },
   { href: '/listen', label: 'Radio', icon: Radio },
-  { href: '/tv', label: 'TV Coast', icon: Tv },
+  { href: '/tv', label: 'TV Live', icon: Tv },
   { href: '/advertise', label: 'Advertise', icon: Megaphone },
   { href: '/about', label: 'About', icon: Info },
 ];
@@ -40,7 +40,7 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 shadow-lg">
       {/* Top utility bar */}
-      <div className="bg-coast-navy text-white/80 text-xs">
+      <div className="bg-newsbooth-navy text-white/80 text-xs">
         <div className="max-w-7xl mx-auto px-4 flex items-center justify-between h-8">
           <span>{today}</span>
           <div className="flex items-center gap-3">
@@ -53,14 +53,14 @@ export default function Header() {
       </div>
 
       {/* Main bar */}
-      <div className="bg-coast-navy border-t border-white/10">
+      <div className="bg-newsbooth-navy border-t border-white/10">
         <div className="max-w-7xl mx-auto px-4 flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-3">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logo.png" alt="The Coast Media Group" className="h-14 w-14 rounded-full object-cover shadow-md ring-2 ring-white/25" />
+            <img src="/logo.png" alt="The News Booth" className="h-14 w-14 rounded-full object-cover shadow-md ring-2 ring-white/25" />
             <span className="leading-tight">
-              <span className="block text-white font-extrabold text-xl tracking-tight">The Coast</span>
-              <span className="block text-coast-gold text-[10px] font-bold tracking-[0.3em]">MEDIA GROUP</span>
+              <span className="block text-white font-extrabold text-xl tracking-tight">The News Booth</span>
+              <span className="block text-newsbooth-accent text-[10px] font-bold tracking-[0.3em]">NEWS BEYOND NOW</span>
             </span>
           </Link>
 
@@ -73,13 +73,13 @@ export default function Header() {
             </Link>
             <Link
               href="/advertise"
-              className="px-4 py-2 rounded-lg bg-coast-gold text-coast-navy text-sm font-bold hover:brightness-110 transition flex items-center gap-2"
+              className="px-4 py-2 rounded-lg bg-newsbooth-accent text-newsbooth-navy text-sm font-bold hover:brightness-110 transition flex items-center gap-2"
             >
               <Megaphone size={15} /> Advertise
             </Link>
             <Link
               href="/listen"
-              className="px-4 py-2 rounded-lg bg-coast-red text-white text-sm font-bold hover:brightness-110 transition flex items-center gap-2"
+              className="px-4 py-2 rounded-lg bg-newsbooth-red text-white text-sm font-bold hover:brightness-110 transition flex items-center gap-2"
             >
               <PlayCircle size={15} /> Listen Live
             </Link>
@@ -96,7 +96,7 @@ export default function Header() {
       </div>
 
       {/* Nav bar */}
-      <nav className="bg-coast-navy-light">
+      <nav className="bg-newsbooth-navy-light">
         <div className="max-w-7xl mx-auto px-4 hidden md:flex items-center">
           {NAV.map(({ href, label, icon: Icon }) => {
             const active = href === '/' ? pathname === '/' : pathname.startsWith(href);
@@ -106,7 +106,7 @@ export default function Header() {
                 href={href}
                 className={`flex items-center gap-2 px-4 py-3 text-sm font-semibold transition border-b-2 ${
                   active
-                    ? 'text-coast-gold border-coast-gold'
+                    ? 'text-newsbooth-accent border-newsbooth-accent'
                     : 'text-white/85 border-transparent hover:text-white'
                 }`}
               >
@@ -147,7 +147,7 @@ export default function Header() {
               <Link href="/report" className="flex-1 text-center px-3 py-2.5 rounded-lg border border-white/30 text-white text-sm font-semibold">
                 Submit Story
               </Link>
-              <Link href="/listen" className="flex-1 text-center px-3 py-2.5 rounded-lg bg-coast-red text-white text-sm font-bold">
+              <Link href="/listen" className="flex-1 text-center px-3 py-2.5 rounded-lg bg-newsbooth-red text-white text-sm font-bold">
                 Listen Live
               </Link>
             </div>
