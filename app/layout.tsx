@@ -9,13 +9,13 @@ import AnalyticsTracker from '@/components/AnalyticsTracker';
 
 export const metadata: Metadata = {
   title: {
-    default: 'The Coast Media Group — News, Radio & TV',
-    template: '%s | The Coast Media Group',
+    default: 'The News Booth — News, Radio & TV',
+    template: '%s | The News Booth',
   },
   description:
-    "Kenya's leading coastal news, radio and TV platform. Breaking news, Radio Coast live, TV Coast, e-paper and advertising opportunities.",
+    "Kenya's leading news, radio and TV platform. Breaking news, Live Radio live, TV Live, e-paper and advertising opportunities.",
   openGraph: {
-    siteName: 'The Coast Media Group',
+    siteName: 'The News Booth',
     type: 'website',
   },
 };
